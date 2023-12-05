@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
@@ -76,17 +77,22 @@ public class MyGdxGame extends ApplicationAdapter {
         CheckBox checkBoxFemale = new CheckBox("Female", skin);
         checkBoxFemale.setScale(10f);
 
+        checkBoxMale.getImage().setScaling(Scaling.fill);
+        checkBoxMale.getImageCell().size(50);
+        checkBoxFemale.getImage().setScaling(Scaling.fill);
+        checkBoxFemale.getImageCell().size(50);
+
         table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
-        table.add(userNameTF).width(TEXT_FIELD_WIDTH).row();
+        table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(emailLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
-        table.add(emailTF).width(TEXT_FIELD_WIDTH).row();
+        table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
 
         table.add(passwordLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
-        table.add(passwordTF).width(TEXT_FIELD_WIDTH).row();
+        table.add(passwordTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(genderLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
