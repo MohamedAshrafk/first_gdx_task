@@ -44,7 +44,8 @@ public class MyGdxGame extends ApplicationAdapter {
         Table table = new Table();
         table.setFillParent(true);
         table.align(Align.topLeft);
-        table.padLeft(10);
+        table.padTop(50);
+        table.padLeft(30);
 
 
         // Labels styles and settings
