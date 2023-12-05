@@ -46,10 +46,21 @@ public class MyGdxGame extends ApplicationAdapter {
         Label userNameLabel = new Label("User Name", labelStyle);
         Label emailLabel = new Label("Email", labelStyle);
         Label passwordLabel = new Label("Password", labelStyle);
+        Label genderLabel = new Label("Gender", labelStyle);
+        Label cityLabel = new Label("City", labelStyle);
+        Label tallLabel = new Label("Tall", labelStyle);
+        Label countryLabel = new Label("Country", labelStyle);
+        Label degreeLabel = new Label("Degree", labelStyle);
+        Label activeLabel = new Label("Active", labelStyle);
         userNameLabel.setAlignment(Align.left);
         emailLabel.setAlignment(Align.left);
         passwordLabel.setAlignment(Align.left);
-//        userNameLabel.setFontScale(3f);
+        genderLabel.setAlignment(Align.left);
+        cityLabel.setAlignment(Align.left);
+        tallLabel.setAlignment(Align.left);
+        countryLabel.setAlignment(Align.left);
+        degreeLabel.setAlignment(Align.left);
+        activeLabel.setAlignment(Align.left);
 
         TextField userNameTF = new TextField("", skin);
         userNameTF.setWidth(TEXT_FIELD_WIDTH);
@@ -66,23 +77,35 @@ public class MyGdxGame extends ApplicationAdapter {
                 START_HEIGHT);
 
         emailLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING);
-        emailTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2 + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
+        emailTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
                 START_HEIGHT - GENERAL_HEIGHT_SPACING);
 
         passwordLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
-        passwordTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2 + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
+        passwordTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
                 START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
+
+        genderLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 3);
+        cityLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 4);
+        tallLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 5);
+        countryLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 6);
+        degreeLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 7);
+        activeLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 8);
+
 
         // adding everything to the stage
         stage.addActor(userNameLabel);
         stage.addActor(emailLabel);
         stage.addActor(passwordLabel);
+        stage.addActor(genderLabel);
+        stage.addActor(cityLabel);
+        stage.addActor(tallLabel);
+        stage.addActor(countryLabel);
+        stage.addActor(degreeLabel);
+        stage.addActor(activeLabel);
 
         stage.addActor(userNameTF);
         stage.addActor(emailTF);
         stage.addActor(passwordTF);
-
-        stage.addActor(userNameTF);
     }
 
     @Override
