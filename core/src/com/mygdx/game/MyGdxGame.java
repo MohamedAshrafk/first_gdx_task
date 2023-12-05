@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.Align;
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
+    private static final int GENERAL_HEIGHT_SPACING = 100;
+
 
     private Stage stage;
     private Skin skin;
@@ -22,8 +24,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void create() {
+        float START_HEIGHT = Gdx.graphics.getHeight() * 0.9f;
         batch = new SpriteBatch();
-//        img = new Texture("badlogic.jpg");
         font = new BitmapFont(Gdx.files.internal("default.fnt"));
 
         stage = new Stage();
@@ -40,9 +42,9 @@ public class MyGdxGame extends ApplicationAdapter {
         passwordLabel.setAlignment(Align.left);
 //        userNameLabel.setFontScale(3f);
 
-        userNameLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, 2000);
-        emailLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, 1900);
-        passwordLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, 1800);
+        userNameLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, START_HEIGHT);
+        emailLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING);
+        passwordLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
 
         stage.addActor(userNameLabel);
         stage.addActor(emailLabel);
