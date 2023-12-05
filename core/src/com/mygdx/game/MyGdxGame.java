@@ -9,28 +9,37 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.Align;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
-    private static final int GENERAL_HEIGHT_SPACING = 100;
+    private static final int GENERAL_HEIGHT_SPACING = 150;
+    private static final int GENERAL_WIDTH_SPACING = 240;
+    private static final int TEXT_FIELD_WIDTH = 500;
 
 
     private Stage stage;
-    private Skin skin;
 
     BitmapFont font;
 
     @Override
     public void create() {
         float START_HEIGHT = Gdx.graphics.getHeight() * 0.9f;
+        float START_WIDTH = Gdx.graphics.getWidth() * 0.15f;
+
+
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("default.fnt"));
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+
+        // Labels styles and settings
         Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
         labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
 
@@ -42,13 +51,38 @@ public class MyGdxGame extends ApplicationAdapter {
         passwordLabel.setAlignment(Align.left);
 //        userNameLabel.setFontScale(3f);
 
-        userNameLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, START_HEIGHT);
-        emailLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING);
-        passwordLabel.setPosition(Gdx.graphics.getWidth() / 6f - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
+        TextField userNameTF = new TextField("", skin);
+        userNameTF.setWidth(TEXT_FIELD_WIDTH);
 
+        TextField emailTF = new TextField("", skin);
+        emailTF.setWidth(TEXT_FIELD_WIDTH);
+
+        TextField passwordTF = new TextField("", skin);
+        passwordTF.setWidth(TEXT_FIELD_WIDTH);
+
+        // set the positions for all views
+        userNameLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT);
+        userNameTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2 + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
+                START_HEIGHT);
+
+        emailLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING);
+        emailTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2 + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
+                START_HEIGHT - GENERAL_HEIGHT_SPACING);
+
+        passwordLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
+        passwordTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2 + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
+                START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
+
+        // adding everything to the stage
         stage.addActor(userNameLabel);
         stage.addActor(emailLabel);
         stage.addActor(passwordLabel);
+
+        stage.addActor(userNameTF);
+        stage.addActor(emailTF);
+        stage.addActor(passwordTF);
+
+        stage.addActor(userNameTF);
     }
 
     @Override
@@ -57,6 +91,8 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Update and draw the stage
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
