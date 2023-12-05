@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.Align;
@@ -16,8 +18,8 @@ import com.badlogic.gdx.utils.Align;
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
-    private static final int GENERAL_HEIGHT_SPACING = 150;
-    private static final int GENERAL_WIDTH_SPACING = 240;
+    private static final int GENERAL_HEIGHT_SPACING = 100;
+    private static final int GENERAL_WIDTH_SPACING = 250;
     private static final int TEXT_FIELD_WIDTH = 500;
 
 
@@ -38,6 +40,11 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
+        Table table = new Table();
+        table.setFillParent(true);
+        table.align(Align.topLeft);
+        table.padLeft(10);
+
 
         // Labels styles and settings
         Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
@@ -52,15 +59,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Label countryLabel = new Label("Country", labelStyle);
         Label degreeLabel = new Label("Degree", labelStyle);
         Label activeLabel = new Label("Active", labelStyle);
-        userNameLabel.setAlignment(Align.left);
-        emailLabel.setAlignment(Align.left);
-        passwordLabel.setAlignment(Align.left);
-        genderLabel.setAlignment(Align.left);
-        cityLabel.setAlignment(Align.left);
-        tallLabel.setAlignment(Align.left);
-        countryLabel.setAlignment(Align.left);
-        degreeLabel.setAlignment(Align.left);
-        activeLabel.setAlignment(Align.left);
+
 
         TextField userNameTF = new TextField("", skin);
         userNameTF.setWidth(TEXT_FIELD_WIDTH);
@@ -71,41 +70,50 @@ public class MyGdxGame extends ApplicationAdapter {
         TextField passwordTF = new TextField("", skin);
         passwordTF.setWidth(TEXT_FIELD_WIDTH);
 
-        // set the positions for all views
-        userNameLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT);
-        userNameTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2 + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
-                START_HEIGHT);
+        // Create a CheckBox with a label
+        CheckBox checkBoxMale = new CheckBox("Male", skin);
+        checkBoxMale.setScale(10f);
+        CheckBox checkBoxFemale = new CheckBox("Female", skin);
+        checkBoxFemale.setScale(10f);
 
-        emailLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING);
-        emailTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
-                START_HEIGHT - GENERAL_HEIGHT_SPACING);
+        table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(userNameTF).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        passwordLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
-        passwordTF.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f + userNameLabel.getWidth() + GENERAL_WIDTH_SPACING,
-                START_HEIGHT - GENERAL_HEIGHT_SPACING * 2);
+        table.add(emailLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(emailTF).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        genderLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 3);
-        cityLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 4);
-        tallLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 5);
-        countryLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 6);
-        degreeLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 7);
-        activeLabel.setPosition(START_WIDTH - userNameLabel.getWidth() / 2f, START_HEIGHT - GENERAL_HEIGHT_SPACING * 8);
+
+        table.add(passwordLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(passwordTF).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(genderLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(checkBoxMale).align(Align.left);
+        table.add(checkBoxFemale).align(Align.left).row();
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(cityLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(tallLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(countryLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(degreeLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
 
         // adding everything to the stage
-        stage.addActor(userNameLabel);
-        stage.addActor(emailLabel);
-        stage.addActor(passwordLabel);
-        stage.addActor(genderLabel);
-        stage.addActor(cityLabel);
-        stage.addActor(tallLabel);
-        stage.addActor(countryLabel);
-        stage.addActor(degreeLabel);
-        stage.addActor(activeLabel);
-
-        stage.addActor(userNameTF);
-        stage.addActor(emailTF);
-        stage.addActor(passwordTF);
+        stage.addActor(table);
     }
 
     @Override
