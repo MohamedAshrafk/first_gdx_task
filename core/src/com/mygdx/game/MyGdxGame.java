@@ -10,18 +10,23 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
-    private static final int GENERAL_HEIGHT_SPACING = 100;
+    private static final int GENERAL_HEIGHT_SPACING = 50;
     private static final int GENERAL_WIDTH_SPACING = 250;
     private static final int TEXT_FIELD_WIDTH = 500;
+    private static final int TABLE_HORIZONTAL_PADDING = 30;
+    private static final int TABLE_VERTICAL_PADDING = 50;
+    private static final int BIG_TEXT_FIELD_HEIGHT = 220;
 
 
     private Stage stage;
@@ -30,9 +35,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void create() {
-        float START_HEIGHT = Gdx.graphics.getHeight() * 0.9f;
-        float START_WIDTH = Gdx.graphics.getWidth() * 0.15f;
-
 
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("default.fnt"));
@@ -44,8 +46,9 @@ public class MyGdxGame extends ApplicationAdapter {
         Table table = new Table();
         table.setFillParent(true);
         table.align(Align.topLeft);
-        table.padTop(50);
-        table.padLeft(30);
+        table.padTop(TABLE_VERTICAL_PADDING);
+        table.padLeft(TABLE_HORIZONTAL_PADDING);
+        table.padRight(TABLE_HORIZONTAL_PADDING);
 
 
         // Labels styles and settings
@@ -60,7 +63,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Label tallLabel = new Label("Tall", labelStyle);
         Label countryLabel = new Label("Country", labelStyle);
         Label degreeLabel = new Label("Degree", labelStyle);
-        Label activeLabel = new Label("Active", labelStyle);
+        Label signUpLabel = new Label("Sign Up", labelStyle);
 
 
         TextField userNameTF = new TextField("", skin);
@@ -72,16 +75,41 @@ public class MyGdxGame extends ApplicationAdapter {
         TextField passwordTF = new TextField("", skin);
         passwordTF.setWidth(TEXT_FIELD_WIDTH);
 
-        // Create a CheckBox with a label
-        CheckBox checkBoxMale = new CheckBox("Male", skin);
-        checkBoxMale.setScale(10f);
-        CheckBox checkBoxFemale = new CheckBox("Female", skin);
-        checkBoxFemale.setScale(10f);
+        TextField cityTF = new TextField("City 1", skin);
+        cityTF.setWidth(TEXT_FIELD_WIDTH);
 
-        checkBoxMale.getImage().setScaling(Scaling.fill);
-        checkBoxMale.getImageCell().size(50);
-        checkBoxFemale.getImage().setScaling(Scaling.fill);
-        checkBoxFemale.getImageCell().size(50);
+        TextField commentTF = new TextArea("", skin);
+        commentTF.setWidth(TEXT_FIELD_WIDTH);
+
+        // Create a CheckBox with a label
+        CheckBox maleCB = new CheckBox("Male", skin);
+        CheckBox femaleCB = new CheckBox("Female", skin);
+        CheckBox activeCB = new CheckBox("Active", skin);
+
+        // making the image assets bigger for the CheckBox widget
+        maleCB.getImage().setScaling(Scaling.fill);
+        maleCB.getImageCell().size(50);
+        femaleCB.getImage().setScaling(Scaling.fill);
+        femaleCB.getImageCell().size(50);
+        activeCB.getImage().setScaling(Scaling.fill);
+        activeCB.getImageCell().size(50);
+
+        // Create a SliderStyle (optional)
+        Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
+        sliderStyle.background = skin.getDrawable("default-slider"); // Set the background drawable
+        sliderStyle.knob = skin.getDrawable("default-slider-knob"); // Set the knob drawable
+        sliderStyle.knob.setMinWidth(50);
+        sliderStyle.knob.setMinHeight(50);
+        sliderStyle.background.setMinHeight(10);
+
+        // Create a Slider with a range and the defined style
+        Slider slider = new Slider(0, 100, 1, false, sliderStyle);
+
+        TextButton clearTB = new TextButton("Clear", skin);
+        TextButton signUpTB = new TextButton("Sign Up", skin);
+
+        table.add(signUpLabel).colspan(3).align(Align.center).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
         table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
@@ -91,26 +119,25 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-
         table.add(passwordLabel).align(Align.left);
         table.add(passwordTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(genderLabel).align(Align.left);
-        table.add(checkBoxMale).align(Align.left);
-        table.add(checkBoxFemale).align(Align.left).row();
+        table.add(maleCB).align(Align.left);
+        table.add(femaleCB).align(Align.right).row();
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(cityLabel).align(Align.left);
-        table.row();
+        table.add(cityTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(tallLabel).align(Align.left);
-        table.row();
+        table.add(slider).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(countryLabel).align(Align.left);
+        table.add(countryLabel).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
@@ -118,9 +145,24 @@ public class MyGdxGame extends ApplicationAdapter {
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
+        table.add(activeCB).align(Align.left);
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(commentTF).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(clearTB).colspan(3).align(Align.right).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        table.add(signUpTB).colspan(3).width(300).height(100).align(Align.center).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
 
         // adding everything to the stage
         stage.addActor(table);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
