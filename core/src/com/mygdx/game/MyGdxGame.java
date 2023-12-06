@@ -87,34 +87,34 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(emailLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(emailLabel).align(Align.left);
         table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
 
-        table.add(passwordLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(passwordLabel).align(Align.left);
         table.add(passwordTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(genderLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(genderLabel).align(Align.left);
         table.add(checkBoxMale).align(Align.left);
         table.add(checkBoxFemale).align(Align.left).row();
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(cityLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(cityLabel).align(Align.left);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(tallLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(tallLabel).align(Align.left);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(countryLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(countryLabel).align(Align.left);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        table.add(degreeLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(degreeLabel).align(Align.left);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
