@@ -5,14 +5,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -20,8 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.Timer;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
@@ -31,9 +38,11 @@ public class MyGdxGame extends ApplicationAdapter {
     private static final int TABLE_HORIZONTAL_PADDING = 30;
     private static final int TABLE_VERTICAL_PADDING = 50;
     private static final int BIG_TEXT_FIELD_HEIGHT = 220;
+    private static final int dialogShowingTime = 1;
 
 
     private Stage stage;
+    private Skin skin;
 
     BitmapFont font;
 
@@ -45,7 +54,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         Table table = new Table();
         table.setFillParent(true);
@@ -53,6 +62,9 @@ public class MyGdxGame extends ApplicationAdapter {
         table.padTop(TABLE_VERTICAL_PADDING);
         table.padLeft(TABLE_HORIZONTAL_PADDING);
         table.padRight(TABLE_HORIZONTAL_PADDING);
+
+        skin.getDrawable("default-window").setMinWidth(500);
+        skin.getDrawable("default-window").setMinHeight(500);
 
 
         // Labels styles and settings
@@ -82,13 +94,35 @@ public class MyGdxGame extends ApplicationAdapter {
         TextField cityTF = new TextField("City 1", skin);
         cityTF.setWidth(TEXT_FIELD_WIDTH);
 
+        // Create an array of options for the drop-down menu
+        Array<String> options = new Array<>();
+        options.add("City 1");
+        options.add("City 2");
+        options.add("City 3");
+
+        // Create a SelectBox with the options and skin
+        SelectBox<String> citiesSelectBox = new SelectBox<>(skin);
+        citiesSelectBox.setItems(options);
+
         TextField commentTF = new TextArea("", skin);
         commentTF.setWidth(TEXT_FIELD_WIDTH);
 
+        // adding the Check Box Group
+        ButtonGroup<CheckBox> checkBoxGroup = new ButtonGroup<>();
+
         // Create a CheckBox with a label
-        CheckBox maleCB = new CheckBox("Male", skin);
+        final CheckBox maleCB = new CheckBox("Male", skin);
         CheckBox femaleCB = new CheckBox("Female", skin);
         CheckBox activeCB = new CheckBox("Active", skin);
+
+        // setting the min checks to be 0 and max checks to be 1
+        checkBoxGroup.setMinCheckCount(0);
+        checkBoxGroup.setMaxCheckCount(1);
+
+        checkBoxGroup.add(maleCB, femaleCB);
+
+        maleCB.addListener(new CheckBoxChangeListener());
+        femaleCB.addListener(new CheckBoxChangeListener());
 
         // making the image assets bigger for the CheckBox widget
         maleCB.getImage().setScaling(Scaling.fill);
@@ -115,6 +149,8 @@ public class MyGdxGame extends ApplicationAdapter {
         VerticalGroup verticalGroup = new VerticalGroup();
         verticalGroup.fill();
         ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
+
+        verticalGroup.addListener(new ButtonChangeListener());
 
         TextButton country1TB = new TextButton("Country1", skin);
         TextButton country2TB = new TextButton("Country2", skin);
@@ -170,7 +206,7 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(cityLabel).align(Align.left);
-        table.add(cityTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
+        table.add(citiesSelectBox).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(tallLabel).align(Align.left);
@@ -221,5 +257,39 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+    }
+
+    class CheckBoxChangeListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            if (((CheckBox) actor).isChecked()) {
+                final Dialog d = new Dialog("", skin);
+                d.text(((CheckBox) actor).getText().toString());
+                d.getContentTable().padTop(80f);
+                d.show(stage);
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        d.hide();
+                    }
+                }, dialogShowingTime);
+            }
+        }
+    }
+
+    class ButtonChangeListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            final Dialog d = new Dialog("", skin);
+            d.text(((TextButton) actor).getText().toString());
+            d.getContentTable().padTop(80f);
+            d.show(stage);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    d.hide();
+                }
+            }, dialogShowingTime);
+        }
     }
 }
