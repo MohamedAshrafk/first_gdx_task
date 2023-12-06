@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -15,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -43,6 +42,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private Stage stage;
     private Skin skin;
+
+    private int currentDegreeValue = 0;
+    TextField spinnerTF;
 
     BitmapFont font;
 
@@ -146,36 +148,30 @@ public class MyGdxGame extends ApplicationAdapter {
         TextButton clearTB = new TextButton("Clear", skin);
         TextButton signUpTB = new TextButton("Sign Up", skin);
 
-        VerticalGroup verticalGroup = new VerticalGroup();
-        verticalGroup.fill();
-        ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
+        Array<String> arrTextButtons = new Array<>();
 
-        verticalGroup.addListener(new ButtonChangeListener());
+        for (int i = 0; i < 10; i++){
+            arrTextButtons.add("City" + (i + 1));
+        }
 
-        TextButton country1TB = new TextButton("Country1", skin);
-        TextButton country2TB = new TextButton("Country2", skin);
-        TextButton country3TB = new TextButton("Country3", skin);
-        TextButton country4TB = new TextButton("Country4", skin);
-        TextButton country5TB = new TextButton("Country5", skin);
-        TextButton country6TB = new TextButton("Country6", skin);
-        TextButton country7TB = new TextButton("Country7", skin);
-        TextButton country8TB = new TextButton("Countryyyyyyyyyyy8", skin);
+        List<String> listTextButtons = new List<>(skin);
+        listTextButtons.setItems(arrTextButtons);
+        ScrollPane scrollPane = new ScrollPane(listTextButtons, skin);
 
-        verticalGroup.addActor(country1TB);
-        verticalGroup.addActor(country2TB);
-        verticalGroup.addActor(country3TB);
-        verticalGroup.addActor(country4TB);
-        verticalGroup.addActor(country5TB);
-        verticalGroup.addActor(country6TB);
-        verticalGroup.addActor(country7TB);
-        verticalGroup.addActor(country8TB);
+        listTextButtons.addListener(new ButtonChangeListener());
+
 
         // making the spinner using two TextButtons and a TextField
+
         TextButton incrementTB = new TextButton("  -  ", skin);
         incrementTB.setWidth(100);
-        TextField spinnerTF = new TextField("", skin);
+        incrementTB.addListener(new IncrementButtonChangeListener());
+        spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
+        spinnerTF.setDisabled(true);
         spinnerTF.setWidth(TEXT_FIELD_WIDTH / 2f);
         TextButton decrementTB = new TextButton("  +  ", skin);
+        decrementTB.addListener(new IncrementButtonChangeListener());
+
 
         HorizontalGroup hg = new HorizontalGroup();
         hg.fill();
@@ -281,7 +277,7 @@ public class MyGdxGame extends ApplicationAdapter {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             final Dialog d = new Dialog("", skin);
-            d.text(((TextButton) actor).getText().toString());
+            d.text(((List) actor).getSelected().toString());
             d.getContentTable().padTop(80f);
             d.show(stage);
             Timer.schedule(new Timer.Task() {
@@ -290,6 +286,17 @@ public class MyGdxGame extends ApplicationAdapter {
                     d.hide();
                 }
             }, dialogShowingTime);
+        }
+    }
+
+    class IncrementButtonChangeListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            if (((TextButton) actor).getText().toString().equals("  -  ")) {
+                spinnerTF.setText(String.valueOf(--currentDegreeValue));
+            } else if (((TextButton) actor).getText().toString().equals("  +  ")) {
+                spinnerTF.setText(String.valueOf(++currentDegreeValue));
+            }
         }
     }
 }
