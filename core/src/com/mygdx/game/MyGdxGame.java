@@ -3,25 +3,28 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    Texture img;
     private static final int GENERAL_HEIGHT_SPACING = 50;
     private static final int GENERAL_WIDTH_SPACING = 250;
     private static final int TEXT_FIELD_WIDTH = 500;
@@ -109,6 +112,42 @@ public class MyGdxGame extends ApplicationAdapter {
         TextButton clearTB = new TextButton("Clear", skin);
         TextButton signUpTB = new TextButton("Sign Up", skin);
 
+        VerticalGroup verticalGroup = new VerticalGroup();
+        verticalGroup.fill();
+        ScrollPane scrollPane = new ScrollPane(verticalGroup, skin);
+
+        TextButton country1TB = new TextButton("Country1", skin);
+        TextButton country2TB = new TextButton("Country2", skin);
+        TextButton country3TB = new TextButton("Country3", skin);
+        TextButton country4TB = new TextButton("Country4", skin);
+        TextButton country5TB = new TextButton("Country5", skin);
+        TextButton country6TB = new TextButton("Country6", skin);
+        TextButton country7TB = new TextButton("Country7", skin);
+        TextButton country8TB = new TextButton("Countryyyyyyyyyyy8", skin);
+
+        verticalGroup.addActor(country1TB);
+        verticalGroup.addActor(country2TB);
+        verticalGroup.addActor(country3TB);
+        verticalGroup.addActor(country4TB);
+        verticalGroup.addActor(country5TB);
+        verticalGroup.addActor(country6TB);
+        verticalGroup.addActor(country7TB);
+        verticalGroup.addActor(country8TB);
+
+        // making the spinner using two TextButtons and a TextField
+        TextButton incrementTB = new TextButton("  -  ", skin);
+        incrementTB.setWidth(100);
+        TextField spinnerTF = new TextField("", skin);
+        spinnerTF.setWidth(TEXT_FIELD_WIDTH / 2f);
+        TextButton decrementTB = new TextButton("  +  ", skin);
+
+        HorizontalGroup hg = new HorizontalGroup();
+        hg.fill();
+        hg.space(10);
+        hg.addActor(incrementTB);
+        hg.addActor(spinnerTF);
+        hg.addActor(decrementTB);
+
         table.add(signUpLabel).colspan(3).align(Align.center).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
@@ -139,10 +178,11 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(countryLabel).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left);
-        table.row();
+        table.add(scrollPane).colspan(2).height(BIG_TEXT_FIELD_HEIGHT).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(degreeLabel).align(Align.left);
+        table.add(hg).colspan(2).align(Align.center);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
@@ -181,6 +221,5 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        img.dispose();
     }
 }
