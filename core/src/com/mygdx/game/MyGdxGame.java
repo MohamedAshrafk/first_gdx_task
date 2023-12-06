@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -52,7 +53,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
         // Labels styles and settings
-        Label.LabelStyle labelStyle = new Label.LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
         labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
 
         Label userNameLabel = new Label("User Name", labelStyle);
