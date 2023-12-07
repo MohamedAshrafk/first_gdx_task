@@ -30,18 +30,18 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 
 public class MyGdxGame extends ApplicationAdapter {
-    SpriteBatch batch;
     private static final int GENERAL_HEIGHT_SPACING = 50;
     private static final int GENERAL_WIDTH_SPACING = 250;
+    private static final int SMALL_WIDTH_SPACING = 15;
     private static final int TEXT_FIELD_WIDTH = 500;
     private static final int TABLE_HORIZONTAL_PADDING = 30;
     private static final int TABLE_VERTICAL_PADDING = 50;
     private static final int BIG_TEXT_FIELD_HEIGHT = 220;
     private static final int dialogShowingTime = 1;
 
-
     private Stage stage;
     private Skin skin;
+    private Table table;
 
     private int currentDegreeValue = 0;
     TextField spinnerTF;
@@ -51,14 +51,13 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
 
-        batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("default.fnt"));
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        Table table = new Table();
+        table = new Table();
         table.setFillParent(true);
         table.align(Align.topLeft);
         table.padTop(TABLE_VERTICAL_PADDING);
@@ -68,46 +67,92 @@ public class MyGdxGame extends ApplicationAdapter {
         skin.getDrawable("default-window").setMinWidth(500);
         skin.getDrawable("default-window").setMinHeight(500);
 
+        configureAll();
 
+        // adding everything to the stage
+        stage.addActor(table);
+
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    private void configureAll(){
+        configureTitleField();
+        configureNameField();
+        configureEmailField();
+        configurePasswordField();
+        configureGenderField();
+        configureCityField();
+        configureTallField();
+        configureCountryField();
+        configureDegreeField();
+        configureActiveField();
+        configureCommentField();
+        configureBottomButtonsField();
+    }
+
+    private void configureTitleField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label signUpLabel = new Label("Sign Up", labelStyle);
+
+        table.add(signUpLabel).colspan(3).align(Align.center).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureNameField() {
         // Labels styles and settings
         LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
         labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
 
         Label userNameLabel = new Label("User Name", labelStyle);
-        Label emailLabel = new Label("Email", labelStyle);
-        Label passwordLabel = new Label("Password", labelStyle);
-        Label genderLabel = new Label("Gender", labelStyle);
-        Label cityLabel = new Label("City", labelStyle);
-        Label tallLabel = new Label("Tall", labelStyle);
-        Label countryLabel = new Label("Country", labelStyle);
-        Label degreeLabel = new Label("Degree", labelStyle);
-        Label signUpLabel = new Label("Sign Up", labelStyle);
-
 
         TextField userNameTF = new TextField("", skin);
         userNameTF.setWidth(TEXT_FIELD_WIDTH);
 
+        table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
+        table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureEmailField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label emailLabel = new Label("Email", labelStyle);
+
         TextField emailTF = new TextField("", skin);
         emailTF.setWidth(TEXT_FIELD_WIDTH);
+
+        table.add(emailLabel).align(Align.left);
+        table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configurePasswordField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label passwordLabel = new Label("Password", labelStyle);
 
         TextField passwordTF = new TextField("", skin);
         passwordTF.setWidth(TEXT_FIELD_WIDTH);
 
-        TextField cityTF = new TextField("City 1", skin);
-        cityTF.setWidth(TEXT_FIELD_WIDTH);
+        table.add(passwordLabel).align(Align.left);
+        table.add(passwordTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        // Create an array of options for the drop-down menu
-        Array<String> options = new Array<>();
-        options.add("City 1");
-        options.add("City 2");
-        options.add("City 3");
+    }
 
-        // Create a SelectBox with the options and skin
-        SelectBox<String> citiesSelectBox = new SelectBox<>(skin);
-        citiesSelectBox.setItems(options);
+    private void configureGenderField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
 
-        TextField commentTF = new TextArea("", skin);
-        commentTF.setWidth(TEXT_FIELD_WIDTH);
+        Label genderLabel = new Label("Gender", labelStyle);
 
         // adding the Check Box Group
         ButtonGroup<CheckBox> checkBoxGroup = new ButtonGroup<>();
@@ -115,7 +160,6 @@ public class MyGdxGame extends ApplicationAdapter {
         // Create a CheckBox with a label
         final CheckBox maleCB = new CheckBox("Male", skin);
         CheckBox femaleCB = new CheckBox("Female", skin);
-        CheckBox activeCB = new CheckBox("Active", skin);
 
         // setting the min checks to be 0 and max checks to be 1
         checkBoxGroup.setMinCheckCount(0);
@@ -131,8 +175,43 @@ public class MyGdxGame extends ApplicationAdapter {
         maleCB.getImageCell().size(50);
         femaleCB.getImage().setScaling(Scaling.fill);
         femaleCB.getImageCell().size(50);
-        activeCB.getImage().setScaling(Scaling.fill);
-        activeCB.getImageCell().size(50);
+
+        table.add(genderLabel).align(Align.left);
+        table.add(maleCB).align(Align.left);
+        table.add(femaleCB).align(Align.right).row();
+        table.row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureCityField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label cityLabel = new Label("City", labelStyle);
+
+        // Create an array of options for the drop-down menu
+        Array<String> options = new Array<>();
+
+        for (int i = 0; i < 6; i++) {
+            options.add("City" + (i + 1));
+        }
+
+        // Create a SelectBox with the options and skin
+        SelectBox<String> citiesSelectBox = new SelectBox<>(skin);
+        citiesSelectBox.setItems(options);
+
+        table.add(cityLabel).align(Align.left);
+        table.add(citiesSelectBox).colspan(2).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureTallField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label tallLabel = new Label("Tall", labelStyle);
 
         // Create a SliderStyle (optional)
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
@@ -145,13 +224,22 @@ public class MyGdxGame extends ApplicationAdapter {
         // Create a Slider with a range and the defined style
         Slider slider = new Slider(0, 100, 1, false, sliderStyle);
 
-        TextButton clearTB = new TextButton("Clear", skin);
-        TextButton signUpTB = new TextButton("Sign Up", skin);
+        table.add(tallLabel).align(Align.left);
+        table.add(slider).colspan(2).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureCountryField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label countryLabel = new Label("Country", labelStyle);
 
         Array<String> arrTextButtons = new Array<>();
 
-        for (int i = 0; i < 10; i++){
-            arrTextButtons.add("City" + (i + 1));
+        for (int i = 0; i < 10; i++) {
+            arrTextButtons.add("Country" + (i + 1));
         }
 
         List<String> listTextButtons = new List<>(skin);
@@ -160,11 +248,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
         listTextButtons.addListener(new ButtonChangeListener());
 
+        table.add(countryLabel).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left);
+        table.add(scrollPane).colspan(2).height(BIG_TEXT_FIELD_HEIGHT).width(TEXT_FIELD_WIDTH).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureDegreeField() {
+        // Labels styles and settings
+        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
+        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+
+        Label degreeLabel = new Label("Degree", labelStyle);
 
         // making the spinner using two TextButtons and a TextField
-
         TextButton incrementTB = new TextButton("  -  ", skin);
-        incrementTB.setWidth(100);
         incrementTB.addListener(new IncrementButtonChangeListener());
         spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
         spinnerTF.setDisabled(true);
@@ -172,71 +269,49 @@ public class MyGdxGame extends ApplicationAdapter {
         TextButton decrementTB = new TextButton("  +  ", skin);
         decrementTB.addListener(new IncrementButtonChangeListener());
 
-
-        HorizontalGroup hg = new HorizontalGroup();
-        hg.fill();
-        hg.space(10);
-        hg.addActor(incrementTB);
-        hg.addActor(spinnerTF);
-        hg.addActor(decrementTB);
-
-        table.add(signUpLabel).colspan(3).align(Align.center).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
-        table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(emailLabel).align(Align.left);
-        table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(passwordLabel).align(Align.left);
-        table.add(passwordTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(genderLabel).align(Align.left);
-        table.add(maleCB).align(Align.left);
-        table.add(femaleCB).align(Align.right).row();
-        table.row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(cityLabel).align(Align.left);
-        table.add(citiesSelectBox).colspan(2).width(TEXT_FIELD_WIDTH).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(tallLabel).align(Align.left);
-        table.add(slider).colspan(2).width(TEXT_FIELD_WIDTH).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        table.add(countryLabel).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left);
-        table.add(scrollPane).colspan(2).height(BIG_TEXT_FIELD_HEIGHT).width(TEXT_FIELD_WIDTH).row();
-        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+        HorizontalGroup horizontalGroup = new HorizontalGroup();
+        horizontalGroup.fill();
+        horizontalGroup.space(SMALL_WIDTH_SPACING);
+        horizontalGroup.addActor(incrementTB);
+        horizontalGroup.addActor(spinnerTF);
+        horizontalGroup.addActor(decrementTB);
 
         table.add(degreeLabel).align(Align.left);
-        table.add(hg).colspan(2).align(Align.center);
+        table.add(horizontalGroup).colspan(2).align(Align.center);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureActiveField() {
+        CheckBox activeCB = new CheckBox("Active", skin);
+
+        activeCB.getImage().setScaling(Scaling.fill);
+        activeCB.getImageCell().size(50);
 
         table.add(activeCB).align(Align.left);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureCommentField() {
+        TextField commentTF = new TextArea("", skin);
+        commentTF.setWidth(TEXT_FIELD_WIDTH);
 
         table.add(commentTF).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    private void configureBottomButtonsField() {
+        TextButton clearTB = new TextButton("Clear", skin);
+        TextButton signUpTB = new TextButton("Sign Up", skin);
 
         table.add(clearTB).colspan(3).align(Align.right).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         table.add(signUpTB).colspan(3).width(300).height(100).align(Align.center).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-
-        // adding everything to the stage
-        stage.addActor(table);
-
-        Gdx.input.setInputProcessor(stage);
     }
+
 
     @Override
     public void render() {
@@ -252,7 +327,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        batch.dispose();
+
     }
 
     class CheckBoxChangeListener extends ChangeListener {
