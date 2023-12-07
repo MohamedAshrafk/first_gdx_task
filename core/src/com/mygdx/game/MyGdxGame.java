@@ -35,6 +35,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 
+import java.util.Objects;
+
 public class MyGdxGame extends ApplicationAdapter {
     private static final int GENERAL_HEIGHT_SPACING = 50;
     private static final int GENERAL_WIDTH_SPACING = 250;
@@ -48,14 +50,21 @@ public class MyGdxGame extends ApplicationAdapter {
     private Stage stage;
     private Skin skin;
     private Table table;
+    LabelStyle labelStyle;
 
     TextField commentTF;
     String commentString = "";
     ScrollPane commentScrollPane;
 
+    String preSelectedSelectBoxValue = "";
+
     private int currentDegreeValue = 0;
     TextField spinnerTF;
     ProgressBar progressBar;
+
+    TextField userNameTF;
+    TextField emailTF;
+    TextField passwordTF;
 
     BitmapFont font;
 
@@ -78,6 +87,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
         skin.getDrawable("default-window").setMinWidth(500);
         skin.getDrawable("default-window").setMinHeight(500);
+
+        // Labels styles and settings
+        labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         configureAll();
 
@@ -116,17 +130,13 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureNameField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label userNameLabel = new Label("User Name", labelStyle);
 
-        TextField userNameTF = new TextField("", skin);
+        userNameTF = new TextField("", skin);
         userNameTF.setWidth(TEXT_FIELD_WIDTH);
 
-        userNameTF.addListener(new TextFieldChangeListener());
+        userNameTF.addListener(new TextFieldChangeListener("User Name"));
 
         table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
         table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
@@ -134,17 +144,13 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureEmailField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label emailLabel = new Label("Email", labelStyle);
 
-        TextField emailTF = new TextField("", skin);
+        emailTF = new TextField("", skin);
         emailTF.setWidth(TEXT_FIELD_WIDTH);
 
-        emailTF.addListener(new TextFieldChangeListener());
+        emailTF.addListener(new TextFieldChangeListener("Email"));
 
         table.add(emailLabel).align(Align.left);
         table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
@@ -152,14 +158,10 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configurePasswordField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label passwordLabel = new Label("Password", labelStyle);
 
-        TextField passwordTF = new TextField("", skin);
+        passwordTF = new TextField("", skin);
         passwordTF.setWidth(TEXT_FIELD_WIDTH);
 
         passwordTF.setPasswordMode(true);
@@ -172,10 +174,6 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureGenderField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label genderLabel = new Label("Gender", labelStyle);
 
@@ -187,7 +185,7 @@ public class MyGdxGame extends ApplicationAdapter {
         CheckBox femaleCB = new CheckBox("Female", skin);
 
         // setting the min checks to be 0 and max checks to be 1
-        checkBoxGroup.setMinCheckCount(0);
+        checkBoxGroup.setMinCheckCount(1);
         checkBoxGroup.setMaxCheckCount(1);
 
         checkBoxGroup.add(maleCB, femaleCB);
@@ -209,10 +207,6 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureCityField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label cityLabel = new Label("City", labelStyle);
 
@@ -235,10 +229,6 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureTallField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label tallLabel = new Label("Tall", labelStyle);
 
@@ -259,10 +249,6 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureCountryField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label countryLabel = new Label("Country", labelStyle);
 
@@ -284,10 +270,6 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureDegreeField() {
-        // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle();
-        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        labelStyle.font.getData().setScale(3f);
 
         Label degreeLabel = new Label("Degree", labelStyle);
 
@@ -318,6 +300,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         activeCB.getImage().setScaling(Scaling.fill);
         activeCB.getImageCell().size(50);
+
+        activeCB.addListener(new ActiveChangeListener());
 
         table.add(activeCB).align(Align.left);
         table.row();
@@ -370,7 +354,7 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
 
-    static public TextureRegion getTexture(Color color){
+    static public TextureRegion getTexture(Color color) {
         // Create a Pixmap with the White color
         Pixmap pixmapW = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmapW.setColor(color);
@@ -418,11 +402,17 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     class TextFieldChangeListener extends ChangeListener {
+        private final String fieldName;
+
+        public TextFieldChangeListener(String user_name) {
+            this.fieldName = user_name;
+        }
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             String addedText = ((TextField) actor).getText();
 
-            commentString = "\n" + addedText;
+            commentString = "\n" + fieldName + ": " + addedText;
             commentTF.appendText(commentString);
         }
     }
@@ -430,14 +420,19 @@ public class MyGdxGame extends ApplicationAdapter {
     class ListsSelectedChangeListener extends ChangeListener {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            String addedText = "";
+            String addedText;
             if (actor.getClass() == List.class) {
                 addedText = ((List<?>) actor).getSelected().toString();
+                commentString = "\n" + "Country: " + addedText;
+                commentTF.appendText(commentString);
             } else if (actor.getClass() == SelectBox.class) {
                 addedText = ((SelectBox<?>) actor).getSelected().toString();
+                if (!Objects.equals(preSelectedSelectBoxValue, addedText)) {
+                    commentString = "\n" + "City: " + addedText;
+                    preSelectedSelectBoxValue = addedText;
+                    commentTF.appendText(commentString);
+                }
             }
-            commentString = "\n" + addedText;
-            commentTF.appendText(commentString);
         }
     }
 
@@ -449,7 +444,19 @@ public class MyGdxGame extends ApplicationAdapter {
             } else if (((TextButton) actor).getText().toString().equals("  +  ")) {
                 spinnerTF.setText(String.valueOf(++currentDegreeValue));
             }
-            commentString = "\n" + currentDegreeValue;
+            commentString = "\n" + "Degree: " + currentDegreeValue;
+            commentTF.appendText(commentString);
+        }
+    }
+
+    class ActiveChangeListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            if (((CheckBox) actor).isChecked()) {
+                commentString = "\n" + "Active: " + "true";
+            } else {
+                commentString = "\n" + "Active: " + "false";
+            }
             commentTF.appendText(commentString);
         }
     }
@@ -459,6 +466,16 @@ public class MyGdxGame extends ApplicationAdapter {
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
 
+            if (!userNameTF.getText().isEmpty() && !emailTF.getText().isEmpty() && !passwordTF.getText().isEmpty()) {
+                makeItProgress();
+            } else {
+                commentString = "\n" + "missing fields";
+                commentTF.appendText(commentString);
+            }
+
+        }
+
+        private void makeItProgress() {
             final Timer.Task t1 = new Timer.Task() {
                 float progressValue = progressBar.getValue();
 
@@ -480,7 +497,6 @@ public class MyGdxGame extends ApplicationAdapter {
                 }
             };
             Timer.schedule(t1, 0f, 0.01f);
-
         }
     }
 
