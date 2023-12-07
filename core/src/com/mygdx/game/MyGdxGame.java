@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
@@ -47,6 +50,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private int currentDegreeValue = 0;
     TextField spinnerTF;
+    ProgressBar progressBar;
 
     BitmapFont font;
 
@@ -91,6 +95,7 @@ public class MyGdxGame extends ApplicationAdapter {
         configureActiveField();
         configureCommentField();
         configureBottomButtonsField();
+        configureProgressBarField();
     }
 
     private void configureTitleField() {
@@ -333,10 +338,30 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add(clearTB).colspan(3).align(Align.right).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
+        signUpTB.addListener(new SignupButtonClickListener());
+
         table.add(signUpTB).colspan(3).width(300).height(100).align(Align.center).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
 
+    private void configureProgressBarField() {
+        // Create a ProgressBar with a minimum and maximum value
+
+        // Create a SliderStyle (optional)
+        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+        progressBarStyle.background = skin.getDrawable("default-slider"); // Set the background drawable
+        progressBarStyle.knob = skin.getDrawable("default-slider-knob"); // Set the knob drawable
+        progressBarStyle.knob.setMinWidth(50);
+        progressBarStyle.knob.setMinHeight(50);
+        progressBarStyle.background.setMinHeight(10);
+
+        progressBar = new ProgressBar(0f, 100f, 1f, false, progressBarStyle);
+        progressBar.setStyle(progressBarStyle);
+
+        progressBar.setValue(0f);
+        table.add(progressBar).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(50f).align(Align.center).row();
+        table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
 
     @Override
     public void render() {
@@ -406,6 +431,33 @@ public class MyGdxGame extends ApplicationAdapter {
             } else if (((TextButton) actor).getText().toString().equals("  +  ")) {
                 spinnerTF.setText(String.valueOf(++currentDegreeValue));
             }
+        }
+    }
+
+    class SignupButtonClickListener extends ClickListener {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            super.clicked(event, x, y);
+
+            Timer.schedule(new Timer.Task() {
+                float progressValue = progressBar.getValue();
+                @Override
+                public void run() {
+                    float progressSpeed = 50f;
+
+                    // Increment the progress value based on time and speed
+                    progressValue += progressSpeed * Gdx.graphics.getDeltaTime();
+
+                    // Ensure the progress value stays within the bounds of the ProgressBar
+                    if (progressValue > progressBar.getMaxValue()) {
+                        progressValue = progressBar.getMaxValue();
+                    }
+
+                    // Update the ProgressBar value
+                    progressBar.setValue(progressValue);
+                }
+            }, 0f, 0.01f);
+
         }
     }
 }
