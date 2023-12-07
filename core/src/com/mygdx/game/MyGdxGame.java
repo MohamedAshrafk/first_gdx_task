@@ -339,6 +339,7 @@ public class MyGdxGame extends ApplicationAdapter {
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         signUpTB.addListener(new SignupButtonClickListener());
+        clearTB.addListener(new ClearButtonClickListener());
 
         table.add(signUpTB).colspan(3).width(300).height(100).align(Align.center).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
@@ -431,6 +432,8 @@ public class MyGdxGame extends ApplicationAdapter {
             } else if (((TextButton) actor).getText().toString().equals("  +  ")) {
                 spinnerTF.setText(String.valueOf(++currentDegreeValue));
             }
+            commentString = "\n" + currentDegreeValue;
+            commentTF.appendText(commentString);
         }
     }
 
@@ -439,8 +442,9 @@ public class MyGdxGame extends ApplicationAdapter {
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
 
-            Timer.schedule(new Timer.Task() {
+            final Timer.Task t1 = new Timer.Task() {
                 float progressValue = progressBar.getValue();
+
                 @Override
                 public void run() {
                     float progressSpeed = 50f;
@@ -451,13 +455,26 @@ public class MyGdxGame extends ApplicationAdapter {
                     // Ensure the progress value stays within the bounds of the ProgressBar
                     if (progressValue > progressBar.getMaxValue()) {
                         progressValue = progressBar.getMaxValue();
+                        this.cancel();
                     }
 
                     // Update the ProgressBar value
                     progressBar.setValue(progressValue);
                 }
-            }, 0f, 0.01f);
+            };
+            Timer.schedule(t1, 0f, 0.01f);
 
+        }
+    }
+
+    class ClearButtonClickListener extends ClickListener {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            super.clicked(event, x, y);
+
+            progressBar.setValue(0);
+            commentString = "";
+            commentTF.setText(commentString);
         }
     }
 }
