@@ -2,8 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
@@ -346,15 +351,16 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureProgressBarField() {
-        // Create a ProgressBar with a minimum and maximum value
-
-        // Create a SliderStyle (optional)
+        // Create a SliderStyle
         ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
-        progressBarStyle.background = skin.getDrawable("default-slider"); // Set the background drawable
-        progressBarStyle.knob = skin.getDrawable("default-slider-knob"); // Set the knob drawable
-        progressBarStyle.knob.setMinWidth(50);
-        progressBarStyle.knob.setMinHeight(50);
-        progressBarStyle.background.setMinHeight(10);
+
+        // Create a TextureRegionDrawable from the TextureRegion
+        progressBarStyle.knobAfter = new TextureRegionDrawable(getTexture(Color.DARK_GRAY));
+        progressBarStyle.knobAfter.setMinHeight(15f);
+
+        // Create a TextureRegionDrawable from the TextureRegion
+        progressBarStyle.knobBefore = new TextureRegionDrawable(getTexture(Color.GREEN));
+        progressBarStyle.knobBefore.setMinHeight(15f);
 
         progressBar = new ProgressBar(0f, 100f, 1f, false, progressBarStyle);
         progressBar.setStyle(progressBarStyle);
@@ -362,6 +368,17 @@ public class MyGdxGame extends ApplicationAdapter {
         progressBar.setValue(0f);
         table.add(progressBar).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(50f).align(Align.center).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
+    }
+
+    static public TextureRegion getTexture(Color color){
+        // Create a Pixmap with the White color
+        Pixmap pixmapW = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmapW.setColor(color);
+        pixmapW.fill();
+
+        // Create a TextureRegion from the Pixmap
+        Texture texture = new Texture(pixmapW);
+        return new TextureRegion(texture);
     }
 
     @Override
