@@ -152,6 +152,9 @@ public class MyGdxGame extends ApplicationAdapter {
         TextField passwordTF = new TextField("", skin);
         passwordTF.setWidth(TEXT_FIELD_WIDTH);
 
+        passwordTF.setPasswordMode(true);
+        passwordTF.setPasswordCharacter('*'); // Optional: customize the password character
+
         table.add(passwordLabel).align(Align.left);
         table.add(passwordTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
