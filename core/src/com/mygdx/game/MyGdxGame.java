@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -270,16 +269,26 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureDegreeField() {
-
         Label degreeLabel = new Label("Degree", labelStyle);
 
+        // making the custom TextButtonStyle
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.getDrawable("default-round"); // Set the up (default) drawable
+        textButtonStyle.down = skin.getDrawable("default-round-down"); // Set the down drawable
+
+        textButtonStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        textButtonStyle.font.getData().setScale(4f);
+
         // making the spinner using two TextButtons and a TextField
-        TextButton incrementTB = new TextButton("  -  ", skin);
+        TextButton incrementTB = new TextButton("- ", textButtonStyle);
         incrementTB.addListener(new IncrementButtonChangeListener());
+
         spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
         spinnerTF.setDisabled(true);
         spinnerTF.setWidth(TEXT_FIELD_WIDTH / 2f);
-        TextButton decrementTB = new TextButton("  +  ", skin);
+        spinnerTF.setAlignment(Align.center);
+
+        TextButton decrementTB = new TextButton("+ ", textButtonStyle);
         decrementTB.addListener(new IncrementButtonChangeListener());
 
         HorizontalGroup horizontalGroup = new HorizontalGroup();
@@ -350,6 +359,7 @@ public class MyGdxGame extends ApplicationAdapter {
         progressBar.setStyle(progressBarStyle);
 
         progressBar.setValue(0f);
+        progressBar.setVisible(false);
         table.add(progressBar).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(50f).align(Align.center).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
@@ -387,16 +397,10 @@ public class MyGdxGame extends ApplicationAdapter {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             if (((CheckBox) actor).isChecked()) {
-                final Dialog d = new Dialog("", skin);
-                d.text(((CheckBox) actor).getText().toString());
-                d.getContentTable().padTop(80f);
-                d.show(stage);
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        d.hide();
-                    }
-                }, dialogShowingTime);
+                String addedText = ((CheckBox) actor).getText().toString();
+
+                commentString = "Gender: " + addedText + "\n";
+                commentTF.appendText(commentString);
             }
         }
     }
@@ -412,7 +416,7 @@ public class MyGdxGame extends ApplicationAdapter {
         public void changed(ChangeEvent event, Actor actor) {
             String addedText = ((TextField) actor).getText();
 
-            commentString = "\n" + fieldName + ": " + addedText;
+            commentString = fieldName + ": " + addedText + "\n";
             commentTF.appendText(commentString);
         }
     }
@@ -423,12 +427,12 @@ public class MyGdxGame extends ApplicationAdapter {
             String addedText;
             if (actor.getClass() == List.class) {
                 addedText = ((List<?>) actor).getSelected().toString();
-                commentString = "\n" + "Country: " + addedText;
+                commentString = "Country: " + addedText + "\n";
                 commentTF.appendText(commentString);
             } else if (actor.getClass() == SelectBox.class) {
                 addedText = ((SelectBox<?>) actor).getSelected().toString();
                 if (!Objects.equals(preSelectedSelectBoxValue, addedText)) {
-                    commentString = "\n" + "City: " + addedText;
+                    commentString = "City: " + addedText + "\n";
                     preSelectedSelectBoxValue = addedText;
                     commentTF.appendText(commentString);
                 }
@@ -439,12 +443,12 @@ public class MyGdxGame extends ApplicationAdapter {
     class IncrementButtonChangeListener extends ChangeListener {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            if (((TextButton) actor).getText().toString().equals("  -  ")) {
+            if (((TextButton) actor).getText().toString().equals("- ")) {
                 spinnerTF.setText(String.valueOf(--currentDegreeValue));
-            } else if (((TextButton) actor).getText().toString().equals("  +  ")) {
+            } else if (((TextButton) actor).getText().toString().equals("+ ")) {
                 spinnerTF.setText(String.valueOf(++currentDegreeValue));
             }
-            commentString = "\n" + "Degree: " + currentDegreeValue;
+            commentString = "Degree: " + currentDegreeValue + "\n";
             commentTF.appendText(commentString);
         }
     }
@@ -453,9 +457,9 @@ public class MyGdxGame extends ApplicationAdapter {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             if (((CheckBox) actor).isChecked()) {
-                commentString = "\n" + "Active: " + "true";
+                commentString = "Active: " + "true" + "\n";
             } else {
-                commentString = "\n" + "Active: " + "false";
+                commentString = "Active: " + "false" + "\n";
             }
             commentTF.appendText(commentString);
         }
@@ -467,9 +471,10 @@ public class MyGdxGame extends ApplicationAdapter {
             super.clicked(event, x, y);
 
             if (!userNameTF.getText().isEmpty() && !emailTF.getText().isEmpty() && !passwordTF.getText().isEmpty()) {
+                progressBar.setVisible(true);
                 makeItProgress();
             } else {
-                commentString = "\n" + "missing fields";
+                commentString = "missing fields" + "\n";
                 commentTF.appendText(commentString);
             }
 
@@ -489,6 +494,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     // Ensure the progress value stays within the bounds of the ProgressBar
                     if (progressValue > progressBar.getMaxValue()) {
                         progressValue = progressBar.getMaxValue();
+                        progressBar.setVisible(false);
                         this.cancel();
                     }
 
