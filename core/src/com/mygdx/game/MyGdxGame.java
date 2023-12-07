@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
@@ -22,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -42,6 +40,10 @@ public class MyGdxGame extends ApplicationAdapter {
     private Stage stage;
     private Skin skin;
     private Table table;
+
+    TextField commentTF;
+    String commentString = "";
+    ScrollPane commentScrollPane;
 
     private int currentDegreeValue = 0;
     TextField spinnerTF;
@@ -114,6 +116,8 @@ public class MyGdxGame extends ApplicationAdapter {
         TextField userNameTF = new TextField("", skin);
         userNameTF.setWidth(TEXT_FIELD_WIDTH);
 
+        userNameTF.addListener(new TextFieldChangeListener());
+
         table.add(userNameLabel).padRight(GENERAL_WIDTH_SPACING).align(Align.left);
         table.add(userNameTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
@@ -129,6 +133,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         TextField emailTF = new TextField("", skin);
         emailTF.setWidth(TEXT_FIELD_WIDTH);
+
+        emailTF.addListener(new TextFieldChangeListener());
 
         table.add(emailLabel).align(Align.left);
         table.add(emailTF).colspan(2).width(TEXT_FIELD_WIDTH).row();
@@ -208,6 +214,8 @@ public class MyGdxGame extends ApplicationAdapter {
         SelectBox<String> citiesSelectBox = new SelectBox<>(skin);
         citiesSelectBox.setItems(options);
 
+        citiesSelectBox.addListener(new ListsSelectedChangeListener());
+
         table.add(cityLabel).align(Align.left);
         table.add(citiesSelectBox).colspan(2).width(TEXT_FIELD_WIDTH).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
@@ -255,7 +263,7 @@ public class MyGdxGame extends ApplicationAdapter {
         listTextButtons.setItems(arrTextButtons);
         ScrollPane scrollPane = new ScrollPane(listTextButtons, skin);
 
-        listTextButtons.addListener(new ButtonChangeListener());
+        listTextButtons.addListener(new ListsSelectedChangeListener());
 
         table.add(countryLabel).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left);
         table.add(scrollPane).colspan(2).height(BIG_TEXT_FIELD_HEIGHT).width(TEXT_FIELD_WIDTH).row();
@@ -304,10 +312,14 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureCommentField() {
-        TextField commentTF = new TextArea("", skin);
+        commentTF = new TextArea("", skin);
         commentTF.setWidth(TEXT_FIELD_WIDTH);
+        commentTF.setDisabled(true);
 
-        table.add(commentTF).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left).row();
+        commentScrollPane = new ScrollPane(commentTF, skin);
+        commentScrollPane.setFadeScrollBars(false);
+
+        table.add(commentScrollPane).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
 
@@ -337,7 +349,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        skin.dispose();
     }
 
     class CheckBoxChangeListener extends ChangeListener {
@@ -358,19 +371,27 @@ public class MyGdxGame extends ApplicationAdapter {
         }
     }
 
-    class ButtonChangeListener extends ChangeListener {
+    class TextFieldChangeListener extends ChangeListener {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            final Dialog d = new Dialog("", skin);
-            d.text(((List) actor).getSelected().toString());
-            d.getContentTable().padTop(80f);
-            d.show(stage);
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    d.hide();
-                }
-            }, dialogShowingTime);
+            String addedText = ((TextField) actor).getText();
+
+            commentString = "\n" + addedText;
+            commentTF.appendText(commentString);
+        }
+    }
+
+    class ListsSelectedChangeListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            String addedText = "";
+            if (actor.getClass() == List.class) {
+                addedText = ((List<?>) actor).getSelected().toString();
+            } else if (actor.getClass() == SelectBox.class) {
+                addedText = ((SelectBox<?>) actor).getSelected().toString();
+            }
+            commentString = "\n" + addedText;
+            commentTF.appendText(commentString);
         }
     }
 
