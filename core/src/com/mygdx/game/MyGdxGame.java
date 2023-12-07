@@ -56,6 +56,7 @@ public class MyGdxGame extends ApplicationAdapter {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skin.getFont("default-font").getData().setScale(2.5f);
 
         table = new Table();
         table.setFillParent(true);
@@ -75,7 +76,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void configureAll(){
+    private void configureAll() {
         configureTitleField();
         configureNameField();
         configureEmailField();
@@ -92,8 +93,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureTitleField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(4f);
 
         Label signUpLabel = new Label("Sign Up", labelStyle);
 
@@ -103,8 +105,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureNameField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label userNameLabel = new Label("User Name", labelStyle);
 
@@ -118,8 +121,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureEmailField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label emailLabel = new Label("Email", labelStyle);
 
@@ -133,8 +137,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configurePasswordField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label passwordLabel = new Label("Password", labelStyle);
 
@@ -149,8 +154,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureGenderField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label genderLabel = new Label("Gender", labelStyle);
 
@@ -185,8 +191,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureCityField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label cityLabel = new Label("City", labelStyle);
 
@@ -208,8 +215,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureTallField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label tallLabel = new Label("Tall", labelStyle);
 
@@ -231,8 +239,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureCountryField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label countryLabel = new Label("Country", labelStyle);
 
@@ -255,8 +264,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
     private void configureDegreeField() {
         // Labels styles and settings
-        LabelStyle labelStyle = new LabelStyle(skin.getFont("default-font"), skin.getColor("white"));
-        labelStyle.font.getData().setScale(3f); // Change the font size (adjust the scale factor)
+        LabelStyle labelStyle = new LabelStyle();
+        labelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        labelStyle.font.getData().setScale(3f);
 
         Label degreeLabel = new Label("Degree", labelStyle);
 
