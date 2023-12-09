@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
@@ -44,7 +45,9 @@ public class MyGdxGame extends ApplicationAdapter {
     private static final int TABLE_HORIZONTAL_PADDING = 30;
     private static final int TABLE_VERTICAL_PADDING = 50;
     private static final int BIG_TEXT_FIELD_HEIGHT = 220;
-    private static final int dialogShowingTime = 1;
+    private static final int SPINNER_HEIGHT = 80;
+    private static final String INCREMENT_TEXT = "+";
+    private static final String DECREMENT_TEXT = "-";
 
     private Stage stage;
     private Skin skin;
@@ -53,7 +56,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
     TextField commentTF;
     String commentString = "";
-    ScrollPane commentScrollPane;
 
     String preSelectedSelectBoxValue = "";
 
@@ -84,8 +86,10 @@ public class MyGdxGame extends ApplicationAdapter {
         table.padLeft(TABLE_HORIZONTAL_PADDING);
         table.padRight(TABLE_HORIZONTAL_PADDING);
 
-        skin.getDrawable("default-window").setMinWidth(500);
-        skin.getDrawable("default-window").setMinHeight(500);
+//        skin.getDrawable("default-window").setMinWidth(500);
+//        skin.getDrawable("default-window").setMinHeight(500);
+
+//        table.debug();
 
         // Labels styles and settings
         labelStyle = new LabelStyle();
@@ -275,31 +279,30 @@ public class MyGdxGame extends ApplicationAdapter {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.getDrawable("default-round"); // Set the up (default) drawable
         textButtonStyle.down = skin.getDrawable("default-round-down"); // Set the down drawable
+        textButtonStyle.up.setRightWidth(SMALL_WIDTH_SPACING);
+        textButtonStyle.down.setRightWidth(SMALL_WIDTH_SPACING);
 
         textButtonStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        textButtonStyle.font.getData().setScale(4f);
+        textButtonStyle.font.getData().setScale(3f);
 
         // making the spinner using two TextButtons and a TextField
-        TextButton incrementTB = new TextButton("- ", textButtonStyle);
+        TextButton incrementTB = new TextButton(DECREMENT_TEXT, textButtonStyle);
         incrementTB.addListener(new IncrementButtonChangeListener());
 
         spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
-        spinnerTF.setDisabled(true);
-        spinnerTF.setWidth(TEXT_FIELD_WIDTH / 2f);
         spinnerTF.setAlignment(Align.center);
+        spinnerTF.setDisabled(true);
 
-        TextButton decrementTB = new TextButton("+ ", textButtonStyle);
+        TextButton decrementTB = new TextButton(INCREMENT_TEXT, textButtonStyle);
         decrementTB.addListener(new IncrementButtonChangeListener());
 
-        HorizontalGroup horizontalGroup = new HorizontalGroup();
-        horizontalGroup.fill();
-        horizontalGroup.space(SMALL_WIDTH_SPACING);
-        horizontalGroup.addActor(incrementTB);
-        horizontalGroup.addActor(spinnerTF);
-        horizontalGroup.addActor(decrementTB);
+        Table horizontalTable = new Table();
+        horizontalTable.add(incrementTB).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
+        horizontalTable.add(spinnerTF).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
+        horizontalTable.add(decrementTB).prefHeight(SPINNER_HEIGHT);
 
         table.add(degreeLabel).align(Align.left);
-        table.add(horizontalGroup).colspan(2).align(Align.center);
+        table.add(horizontalTable).align(Align.center).colspan(2);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
@@ -318,14 +321,25 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void configureCommentField() {
-        commentTF = new TextArea("", skin);
-        commentTF.setWidth(TEXT_FIELD_WIDTH);
+
+        // Create a TextFieldStyle based on the skin
+
+        // Create a skin (you can use the default skin or create your own)
+        Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.background = localSkin.getDrawable("textfield");
+        textFieldStyle.font = localSkin.getFont("default-font");
+        textFieldStyle.fontColor = localSkin.getColor("white");
+        textFieldStyle.font.getData().setScale(2.f);
+
+        textFieldStyle.background.setLeftWidth(SMALL_WIDTH_SPACING);
+        textFieldStyle.background.setTopHeight(SMALL_WIDTH_SPACING);
+
+        commentTF = new TextArea("", textFieldStyle);
         commentTF.setDisabled(true);
 
-        commentScrollPane = new ScrollPane(commentTF, skin);
-        commentScrollPane.setFadeScrollBars(false);
-
-        table.add(commentScrollPane).colspan(3).width(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).height(BIG_TEXT_FIELD_HEIGHT).align(Align.left).row();
+        table.add(commentTF).colspan(3).prefWidth(stage.getWidth() - TABLE_HORIZONTAL_PADDING * 2).prefHeight(BIG_TEXT_FIELD_HEIGHT).align(Align.left).row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
 
@@ -443,9 +457,9 @@ public class MyGdxGame extends ApplicationAdapter {
     class IncrementButtonChangeListener extends ChangeListener {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            if (((TextButton) actor).getText().toString().equals("- ")) {
+            if (((TextButton) actor).getText().toString().equals(DECREMENT_TEXT)) {
                 spinnerTF.setText(String.valueOf(--currentDegreeValue));
-            } else if (((TextButton) actor).getText().toString().equals("+ ")) {
+            } else if (((TextButton) actor).getText().toString().equals(INCREMENT_TEXT)) {
                 spinnerTF.setText(String.valueOf(++currentDegreeValue));
             }
             commentString = "Degree: " + currentDegreeValue + "\n";
