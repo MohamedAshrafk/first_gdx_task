@@ -59,6 +59,7 @@ public class MyGdxGame extends ApplicationAdapter {
     String preSelectedSelectBoxValue = "";
 
     ProgressBar progressBar;
+    MySpinner spinner;
 
     TextField userNameTF;
     TextField emailTF;
@@ -118,7 +119,7 @@ public class MyGdxGame extends ApplicationAdapter {
         configureProgressBarField();
     }
 
-    public void configureCommentArea(){
+    public void configureCommentArea() {
         // Create a skin (you can use the default skin or create your own)
         Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -290,9 +291,11 @@ public class MyGdxGame extends ApplicationAdapter {
     private void configureDegreeField() {
         Label degreeLabel = new Label("Degree", labelStyle);
 
+        spinner = new MySpinner(skin);
+        spinner.addListener(new SpinnerChangeListener());
 
         table.add(degreeLabel).align(Align.left);
-        table.add(new MySpinner(commentTF, skin).getWidget()).align(Align.center).colspan(2);
+        table.add(spinner.getWidget()).align(Align.center).colspan(2);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
@@ -426,6 +429,14 @@ public class MyGdxGame extends ApplicationAdapter {
                     commentTF.appendText(commentString);
                 }
             }
+        }
+    }
+
+    class SpinnerChangeListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            String commentString = "Degree: " + spinner.getCurrentDegreeValue() + "\n";
+            commentTF.appendText(commentString);
         }
     }
 

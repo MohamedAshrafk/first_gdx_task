@@ -7,24 +7,28 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
-public class MySpinner {
+public class MySpinner extends Widget {
 
     private static final int SPINNER_HEIGHT = 80;
     private static final String INCREMENT_TEXT = "+";
     private static final String DECREMENT_TEXT = "-";
     private static final int SMALL_WIDTH_SPACING = 15;
+
+    public int getCurrentDegreeValue() {
+        return currentDegreeValue;
+    }
+
     private int currentDegreeValue = 0;
 
     TextField spinnerTF;
     private final Skin skin;
-    private final TextField commentTF;
 
-    public MySpinner(TextField commentTF, Skin skin) {
+    public MySpinner(Skin skin) {
         this.skin = skin;
-        this.commentTF = commentTF;
     }
 
     public Table getWidget() {
@@ -65,8 +69,7 @@ public class MySpinner {
             } else if (((TextButton) actor).getText().toString().equals(INCREMENT_TEXT)) {
                 spinnerTF.setText(String.valueOf(++currentDegreeValue));
             }
-            String commentString = "Degree: " + currentDegreeValue + "\n";
-            commentTF.appendText(commentString);
+            fire(event);
         }
     }
 }
