@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -22,11 +21,27 @@ public class MySpinner extends Table {
         return currentDegreeValue;
     }
 
-    private int currentDegreeValue = 0;
+    private int currentDegreeValue;
+
+    public boolean isValidValue() {
+        return isValidValue;
+    }
+
+    private boolean isValidValue = true;
+    private final int minDegreeVal;
+    private final int maxDegreeVal;
 
     TextField spinnerTF;
 
     public MySpinner(Skin skin) {
+        this(skin, 0, 0, 100);
+    }
+
+    public MySpinner(Skin skin, int startValue, int minDegreeVal, int maxDegreeVal) {
+
+        this.currentDegreeValue = startValue;
+        this.minDegreeVal = minDegreeVal;
+        this.maxDegreeVal = maxDegreeVal;
 
         // making the custom TextButtonStyle
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -43,7 +58,11 @@ public class MySpinner extends Table {
         decrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                spinnerTF.setText(String.valueOf(--currentDegreeValue));
+                if (validateValue(currentDegreeValue - 1)) {
+                    isValidValue = true;
+                    spinnerTF.setText(String.valueOf(--currentDegreeValue));
+                } else
+                    isValidValue = false;
             }
         });
 
@@ -55,12 +74,20 @@ public class MySpinner extends Table {
         incrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                spinnerTF.setText(String.valueOf(++currentDegreeValue));
+                if (validateValue(currentDegreeValue + 1)){
+                    isValidValue = true;
+                    spinnerTF.setText(String.valueOf(++currentDegreeValue));
+                } else
+                    isValidValue = false;
             }
         });
 
         add(decrementTB).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
         add(spinnerTF).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
         add(incrementTB).prefHeight(SPINNER_HEIGHT);
+    }
+
+    private boolean validateValue(int value) {
+        return value <= maxDegreeVal && value >= minDegreeVal;
     }
 }

@@ -322,11 +322,16 @@ public class MyGdxGame extends ApplicationAdapter {
     private void configureDegreeField() {
         Label degreeLabel = new Label("Degree", labelStyle);
 
-        spinner = new MySpinner(skin);
+        spinner = new MySpinner(skin, 90, 0, 100);
         spinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                String commentString = "Degree: " + spinner.getCurrentDegreeValue() + "\n";
+                String commentString;
+                if (spinner.isValidValue()) {
+                    commentString = "Degree: " + spinner.getCurrentDegreeValue() + "\n";
+                } else {
+                    commentString = "Not a valid value\n";
+                }
                 commentTF.appendText(commentString);
             }
         });
