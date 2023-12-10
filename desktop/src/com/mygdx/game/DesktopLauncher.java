@@ -9,7 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setWindowSizeLimits(480, 720,480, 720);
+		config.setWindowSizeLimits(500, 1000,500, 1000);
 		config.setTitle("First_Task");
 		new Lwjgl3Application(new MyGdxGame(), config);
 	}
