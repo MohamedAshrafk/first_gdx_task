@@ -39,19 +39,7 @@ public class MySpinner extends Table {
         textButtonStyle.font.getData().setScale(3f);
 
         // making the spinner using two TextButtons and a TextField
-        TextButton incrementTB = new TextButton(DECREMENT_TEXT, textButtonStyle);
-        incrementTB.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                spinnerTF.setText(String.valueOf(++currentDegreeValue));
-            }
-        });
-
-        spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
-        spinnerTF.setAlignment(Align.center);
-        spinnerTF.setDisabled(true);
-
-        TextButton decrementTB = new TextButton(INCREMENT_TEXT, textButtonStyle);
+        TextButton decrementTB = new TextButton(DECREMENT_TEXT, textButtonStyle);
         decrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -59,8 +47,20 @@ public class MySpinner extends Table {
             }
         });
 
-        add(incrementTB).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
+        spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
+        spinnerTF.setAlignment(Align.center);
+        spinnerTF.setDisabled(true);
+
+        TextButton incrementTB = new TextButton(INCREMENT_TEXT, textButtonStyle);
+        incrementTB.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                spinnerTF.setText(String.valueOf(++currentDegreeValue));
+            }
+        });
+
+        add(decrementTB).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
         add(spinnerTF).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
-        add(decrementTB).prefHeight(SPINNER_HEIGHT);
+        add(incrementTB).prefHeight(SPINNER_HEIGHT);
     }
 }
