@@ -465,8 +465,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
                 // Ensure the progress value stays within the bounds of the ProgressBar
                 if (progressValue > progressBar.getMaxValue()) {
-                    progressValue = progressBar.getMaxValue();
                     progressBar.setVisible(false);
+                    progressValue = 0;
                     this.cancel();
                 }
 
