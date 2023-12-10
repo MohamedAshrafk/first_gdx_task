@@ -37,7 +37,7 @@ import java.util.Objects;
 public class MyGdxGame extends ApplicationAdapter {
     private static final int GENERAL_HEIGHT_SPACING = 50;
     private static final int GENERAL_WIDTH_SPACING = 250;
-    private static final int SMALL_WIDTH_SPACING = 15;
+    public static final int SMALL_SPACING = 15;
     private static final int TEXT_FIELD_WIDTH = 500;
     private static final int TABLE_HORIZONTAL_PADDING = 30;
     private static final int TABLE_VERTICAL_PADDING = 50;
@@ -124,8 +124,8 @@ public class MyGdxGame extends ApplicationAdapter {
         textFieldStyle.fontColor = localSkin.getColor("white");
         textFieldStyle.font.getData().setScale(2.f);
 
-        textFieldStyle.background.setLeftWidth(SMALL_WIDTH_SPACING);
-        textFieldStyle.background.setTopHeight(SMALL_WIDTH_SPACING);
+        textFieldStyle.background.setLeftWidth(SMALL_SPACING);
+        textFieldStyle.background.setTopHeight(SMALL_SPACING);
 
         commentTF = new TextArea("", textFieldStyle);
         commentTF.setDisabled(true);
@@ -331,7 +331,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 if (spinner.isValidValue()) {
                     commentString = "Degree: " + spinner.getCurrentDegreeValue() + "\n";
                 } else {
-                    commentString = "Not a valid value\n";
+                    commentString = "Degree: Not a valid value\n";
                 }
                 commentTF.appendText(commentString);
             }
@@ -386,7 +386,7 @@ public class MyGdxGame extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 if (!userNameTF.getText().isEmpty() && !emailTF.getText().isEmpty() && !passwordTF.getText().isEmpty()) {
                     progressBar.setVisible(true);
-                    makeItProgress();
+                    doProgress();
                 } else {
                     commentString = "missing fields" + "\n";
                     commentTF.appendText(commentString);
@@ -452,7 +452,7 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
 
-    private void makeItProgress() {
+    private void doProgress() {
         final Timer.Task t1 = new Timer.Task() {
             float progressValue = progressBar.getValue();
 

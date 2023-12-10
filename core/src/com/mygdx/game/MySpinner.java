@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.MyGdxGame.SMALL_SPACING;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,10 +14,9 @@ import com.badlogic.gdx.utils.Align;
 
 public class MySpinner extends Table {
 
-    private static final int SPINNER_HEIGHT = 80;
+    private static final int SPINNER_DIMENSION = 55;
     private static final String INCREMENT_TEXT = "+";
     private static final String DECREMENT_TEXT = "-";
-    private static final int SMALL_WIDTH_SPACING = 15;
 
     public int getCurrentDegreeValue() {
         return currentDegreeValue;
@@ -47,8 +48,8 @@ public class MySpinner extends Table {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.getDrawable("default-round"); // Set the up (default) drawable
         textButtonStyle.down = skin.getDrawable("default-round-down"); // Set the down drawable
-        textButtonStyle.up.setRightWidth(SMALL_WIDTH_SPACING);
-        textButtonStyle.down.setRightWidth(SMALL_WIDTH_SPACING);
+        textButtonStyle.up.setRightWidth(SMALL_SPACING);
+        textButtonStyle.down.setRightWidth(SMALL_SPACING);
 
         textButtonStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
         textButtonStyle.font.getData().setScale(3f);
@@ -82,9 +83,9 @@ public class MySpinner extends Table {
             }
         });
 
-        add(decrementTB).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
-        add(spinnerTF).prefHeight(SPINNER_HEIGHT).padRight(SMALL_WIDTH_SPACING);
-        add(incrementTB).prefHeight(SPINNER_HEIGHT);
+        add(decrementTB).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION).padRight(SMALL_SPACING);
+        add(spinnerTF).prefHeight(75f).padRight(SMALL_SPACING);
+        add(incrementTB).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION);
     }
 
     private boolean validateValue(int value) {
