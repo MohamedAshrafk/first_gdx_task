@@ -35,16 +35,20 @@ public class MySpinner extends Table {
 
     TextField spinnerTF;
 
-    /** Creates a new Spinner as structure of {@link Table}
+    /**
+     * Creates a new Spinner as structure of {@link Table}
+     *
      * @param skin the skin to be used on making the spinner
      */
     public MySpinner(Skin skin) {
         this(skin, 0, 0, 100, 1);
     }
 
-    /** Creates a new Spinner as structure of {@link Table}
-     * @param skin the skin to be used on making the spinner
-     * @param startValue the start value
+    /**
+     * Creates a new Spinner as structure of {@link Table}
+     *
+     * @param skin         the skin to be used on making the spinner
+     * @param startValue   the start value
      * @param minDegreeVal the minimum value
      * @param maxDegreeVal the maximum value
      * @param stepSizePara the step size between values
