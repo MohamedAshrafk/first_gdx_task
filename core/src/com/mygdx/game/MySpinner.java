@@ -18,17 +18,11 @@ public class MySpinner extends Table {
     private static final String INCREMENT_TEXT = "+";
     private static final String DECREMENT_TEXT = "-";
 
-    public int getCurrentDegreeValue() {
-        return currentDegreeValue;
+    public int getValue() {
+        return value;
     }
 
-    private int currentDegreeValue;
-
-    public boolean isValidValue() {
-        return isValidValue;
-    }
-
-    private boolean isValidValue = true;
+    private int value;
     private final int minDegreeVal;
     private final int maxDegreeVal;
     private final int stepSize;
@@ -52,10 +46,10 @@ public class MySpinner extends Table {
      * @param minDegreeVal the minimum value
      * @param maxDegreeVal the maximum value
      * @param stepSizePara the step size between values
-     * */
+     */
     public MySpinner(Skin skin, int startValue, int minDegreeVal, int maxDegreeVal, int stepSizePara) {
 
-        this.currentDegreeValue = startValue;
+        this.value = startValue;
         this.minDegreeVal = minDegreeVal;
         this.maxDegreeVal = maxDegreeVal;
         this.stepSize = stepSizePara;
@@ -75,16 +69,16 @@ public class MySpinner extends Table {
         decrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (validateValue(currentDegreeValue - stepSize)) {
-                    isValidValue = true;
-                    currentDegreeValue -= stepSize;
-                    spinnerTF.setText(String.valueOf(currentDegreeValue));
-                } else
-                    isValidValue = false;
+                if (validateValue(value - stepSize)) {
+                    value -= stepSize;
+                    spinnerTF.setText(String.valueOf(value));
+                } else {
+                    event.stop();
+                }
             }
         });
 
-        spinnerTF = new TextField(String.valueOf(currentDegreeValue), skin);
+        spinnerTF = new TextField(String.valueOf(value), skin);
         spinnerTF.setAlignment(Align.center);
         spinnerTF.setDisabled(true);
 
@@ -92,17 +86,17 @@ public class MySpinner extends Table {
         incrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (validateValue(currentDegreeValue + stepSize)){
-                    isValidValue = true;
-                    currentDegreeValue += stepSize;
-                    spinnerTF.setText(String.valueOf(currentDegreeValue));
-                } else
-                    isValidValue = false;
+                if (validateValue(value + stepSize)) {
+                    value += stepSize;
+                    spinnerTF.setText(String.valueOf(value));
+                } else {
+                    event.stop();
+                }
             }
         });
 
         add(decrementTB).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION).padRight(SMALL_SPACING);
-        add(spinnerTF).prefHeight(75f).padRight(SMALL_SPACING);
+        add(spinnerTF).prefHeight(SPINNER_DIMENSION + 15f).padRight(SMALL_SPACING);
         add(incrementTB).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION);
     }
 

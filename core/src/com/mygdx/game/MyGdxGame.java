@@ -337,11 +337,7 @@ public class MyGdxGame extends ApplicationAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 String commentString;
-                if (spinner.isValidValue()) {
-                    commentString = "Degree: " + spinner.getCurrentDegreeValue() + "\n";
-                } else {
-                    commentString = "Degree: Not a valid value\n";
-                }
+                commentString = "Degree: " + spinner.getValue() + "\n";
                 commentTF.appendText(commentString);
             }
         });
