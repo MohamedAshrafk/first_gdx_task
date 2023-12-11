@@ -82,7 +82,7 @@
   WindowStyle: {
     default: {
       titleFont: default-font,
-      background: default-window,
+      background: default-slider,
       titleFontColor: white
     },
     dialog: {

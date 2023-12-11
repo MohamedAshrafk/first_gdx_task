@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -43,33 +44,36 @@ public class MyGdxGame extends ApplicationAdapter {
     private static final int TABLE_HORIZONTAL_PADDING = 30;
     private static final int TABLE_VERTICAL_PADDING = 50;
     private static final int BIG_TEXT_FIELD_HEIGHT = 220;
+    private static final int SCREEN_WIDTH = 1080;
+    private static final int SCREEN_HEIGHT = 2340;
+    private static final int DIALOG_WIDTH = 900;
+    private static final int DIALOG_HEIGHT = 1100;
+    private static final int DIALOG_HORIZONTAL_SPACING = 100;
 
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
     private Table table;
-    LabelStyle labelStyle;
+    private LabelStyle labelStyle;
 
-    TextField commentTF;
-    String commentString = "";
+    private String preSelectedSelectBoxValue = "";
 
-    String preSelectedSelectBoxValue = "";
+    private ProgressBar progressBar;
 
-    ProgressBar progressBar;
-    MySpinner spinner;
-
-    TextField userNameTF;
-    TextField emailTF;
-    TextField passwordTF;
-
-    BitmapFont font;
+    private TextField userNameTF;
+    private TextField emailTF;
+    private TextField passwordTF;
+    private ButtonGroup<CheckBox> genderCBGroup;
+    private SelectBox<String> citiesSelectBox;
+    private List<String> countryList;
+    private MySpinner degreeSpinner;
+    private CheckBox activeCB;
+    private TextField commentTF;
 
     @Override
     public void create() {
 
-        font = new BitmapFont(Gdx.files.internal("default.fnt"));
-
-        viewport = new FitViewport(1080, 2340);
+        viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT);
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -82,8 +86,9 @@ public class MyGdxGame extends ApplicationAdapter {
         table.padLeft(TABLE_HORIZONTAL_PADDING);
         table.padRight(TABLE_HORIZONTAL_PADDING);
 
-//        skin.getDrawable("default-window").setMinWidth(500);
-//        skin.getDrawable("default-window").setMinHeight(500);
+
+//        skin.getDrawable("default-window").setMinWidth(DIALOG_WIDTH);
+//        skin.getDrawable("default-window").setMinHeight(DIALOG_HEIGHT);
 
 //        table.debug();
 
@@ -201,17 +206,17 @@ public class MyGdxGame extends ApplicationAdapter {
         Label genderLabel = new Label("Gender", labelStyle);
 
         // adding the Check Box Group
-        ButtonGroup<CheckBox> checkBoxGroup = new ButtonGroup<>();
+        genderCBGroup = new ButtonGroup<>();
 
         // Create a CheckBox with a label
         final CheckBox maleCB = new CheckBox("Male", skin);
         CheckBox femaleCB = new CheckBox("Female", skin);
 
         // setting the min checks to be 0 and max checks to be 1
-        checkBoxGroup.setMinCheckCount(1);
-        checkBoxGroup.setMaxCheckCount(1);
+        genderCBGroup.setMinCheckCount(1);
+        genderCBGroup.setMaxCheckCount(1);
 
-        checkBoxGroup.add(maleCB, femaleCB);
+        genderCBGroup.add(maleCB, femaleCB);
 
         maleCB.addListener(new ChangeListener() {
             @Override
@@ -219,7 +224,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 if (((CheckBox) actor).isChecked()) {
                     String addedText = ((CheckBox) actor).getText().toString();
 
-                    commentString = "Gender: " + addedText + "\n";
+                    String commentString = "Gender: " + addedText + "\n";
                     commentTF.appendText(commentString);
                 }
             }
@@ -230,7 +235,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 if (((CheckBox) actor).isChecked()) {
                     String addedText = ((CheckBox) actor).getText().toString();
 
-                    commentString = "Gender: " + addedText + "\n";
+                    String commentString = "Gender: " + addedText + "\n";
                     commentTF.appendText(commentString);
                 }
             }
@@ -261,7 +266,7 @@ public class MyGdxGame extends ApplicationAdapter {
         }
 
         // Create a SelectBox with the options and skin
-        SelectBox<String> citiesSelectBox = new SelectBox<>(skin);
+        citiesSelectBox = new SelectBox<>(skin);
         citiesSelectBox.setItems(options);
 
         citiesSelectBox.addListener(new ChangeListener() {
@@ -269,7 +274,7 @@ public class MyGdxGame extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 String addedText = ((SelectBox<?>) actor).getSelected().toString();
                 if (!Objects.equals(preSelectedSelectBoxValue, addedText)) {
-                    commentString = "City: " + addedText + "\n";
+                    String commentString = "City: " + addedText + "\n";
                     preSelectedSelectBoxValue = addedText;
                     commentTF.appendText(commentString);
                 }
@@ -311,15 +316,15 @@ public class MyGdxGame extends ApplicationAdapter {
             arrTextButtons.add("Country" + (i + 1));
         }
 
-        List<String> listTextButtons = new List<>(skin);
-        listTextButtons.setItems(arrTextButtons);
-        ScrollPane scrollPane = new ScrollPane(listTextButtons, skin);
+        countryList = new List<>(skin);
+        countryList.setItems(arrTextButtons);
+        ScrollPane scrollPane = new ScrollPane(countryList, skin);
 
-        listTextButtons.addListener(new ChangeListener() {
+        countryList.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 String addedText = ((List<?>) actor).getSelected().toString();
-                commentString = "Country: " + addedText + "\n";
+                String commentString = "Country: " + addedText + "\n";
                 commentTF.appendText(commentString);
             }
         });
@@ -332,24 +337,23 @@ public class MyGdxGame extends ApplicationAdapter {
     private void configureDegreeField() {
         Label degreeLabel = new Label("Degree", labelStyle);
 
-        spinner = new MySpinner(skin, 90, 0, 100, 5);
-        spinner.addListener(new ChangeListener() {
+        degreeSpinner = new MySpinner(skin, 90, 0, 100, 5);
+        degreeSpinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                String commentString;
-                commentString = "Degree: " + spinner.getValue() + "\n";
+                String commentString = "Degree: " + degreeSpinner.getValue() + "\n";
                 commentTF.appendText(commentString);
             }
         });
 
         table.add(degreeLabel).align(Align.left);
-        table.add(spinner).align(Align.center).colspan(2);
+        table.add(degreeSpinner).align(Align.center).colspan(2);
         table.row();
         table.add().padTop(GENERAL_HEIGHT_SPACING).row();
     }
 
     private void configureActiveField() {
-        CheckBox activeCB = new CheckBox("Active", skin);
+        activeCB = new CheckBox("Active", skin);
 
         activeCB.getImage().setScaling(Scaling.fill);
         activeCB.getImageCell().size(50);
@@ -357,6 +361,7 @@ public class MyGdxGame extends ApplicationAdapter {
         activeCB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                String commentString;
                 if (((CheckBox) actor).isChecked()) {
                     commentString = "Active: " + "true" + "\n";
                 } else {
@@ -393,7 +398,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     progressBar.setVisible(true);
                     doProgress();
                 } else {
-                    commentString = "missing fields" + "\n";
+                    String commentString = "missing fields" + "\n";
                     commentTF.appendText(commentString);
                 }
             }
@@ -403,8 +408,7 @@ public class MyGdxGame extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
 
                 progressBar.setValue(0);
-                commentString = "";
-                commentTF.setText(commentString);
+                commentTF.setText("");
             }
         });
 
@@ -450,7 +454,7 @@ public class MyGdxGame extends ApplicationAdapter {
             public void changed(ChangeEvent event, Actor actor) {
                 String addedText = ((TextField) actor).getText();
 
-                commentString = fieldName + ": " + addedText + "\n";
+                String commentString = fieldName + ": " + addedText + "\n";
                 commentTF.appendText(commentString);
             }
         };
@@ -470,9 +474,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
                 // Ensure the progress value stays within the bounds of the ProgressBar
                 if (progressValue > progressBar.getMaxValue()) {
+                    this.cancel();
                     progressBar.setVisible(false);
                     progressValue = 0;
-                    this.cancel();
+                    showUserInfo();
                 }
 
                 // Update the ProgressBar value
@@ -480,6 +485,67 @@ public class MyGdxGame extends ApplicationAdapter {
             }
         };
         Timer.schedule(t1, 0f, 0.01f);
+    }
+
+    private void showUserInfo() {
+        final Dialog d = new Dialog("", skin);
+
+        Table localTable = new Table();
+        localTable.setFillParent(true);
+        localTable.align(Align.left);
+        localTable.padTop(GENERAL_HEIGHT_SPACING / 2f);
+        localTable.padRight(TABLE_HORIZONTAL_PADDING);
+        localTable.padLeft(TABLE_HORIZONTAL_PADDING);
+        localTable.padBottom(TABLE_HORIZONTAL_PADDING);
+
+        // Labels styles and settings
+        LabelStyle titleLabelStyle = new LabelStyle();
+        titleLabelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        titleLabelStyle.font.getData().setScale(3f);
+
+        localTable.add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("User Name:", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
+        localTable.add(new Label(userNameTF.getText(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("Email:", skin)).align(Align.left);
+        localTable.add(new Label(emailTF.getText(), skin)).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("Gender:", skin)).align(Align.left);
+        localTable.add(new Label(genderCBGroup.getChecked().getText(), skin)).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("City:", skin)).align(Align.left);
+        localTable.add(new Label(citiesSelectBox.getSelected(), skin)).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("Country:", skin)).align(Align.left);
+        localTable.add(new Label(countryList.getSelected(), skin)).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("Degree:", skin)).align(Align.left);
+        localTable.add(new Label(String.valueOf(degreeSpinner.getValue()), skin)).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("Active:", skin)).align(Align.left);
+        localTable.add(new Label(activeCB.isChecked() ? "Yes" : "No", skin)).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        TextButton cancelButton = new TextButton("OK", skin);
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                d.hide();
+            }
+        });
+
+        localTable.add(cancelButton).prefWidth(150).prefHeight(70).colspan(3).align(Align.center);
+
+        d.getContentTable().add(localTable).align(Align.topLeft);
+        d.show(stage);
     }
 
     @Override
