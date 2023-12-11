@@ -31,18 +31,30 @@ public class MySpinner extends Table {
     private boolean isValidValue = true;
     private final int minDegreeVal;
     private final int maxDegreeVal;
+    private final int stepSize;
 
     TextField spinnerTF;
 
+    /** Creates a new Spinner as structure of {@link Table}
+     * @param skin the skin to be used on making the spinner
+     */
     public MySpinner(Skin skin) {
-        this(skin, 0, 0, 100);
+        this(skin, 0, 0, 100, 1);
     }
 
-    public MySpinner(Skin skin, int startValue, int minDegreeVal, int maxDegreeVal) {
+    /** Creates a new Spinner as structure of {@link Table}
+     * @param skin the skin to be used on making the spinner
+     * @param startValue the start value
+     * @param minDegreeVal the minimum value
+     * @param maxDegreeVal the maximum value
+     * @param stepSizePara the step size between values
+     * */
+    public MySpinner(Skin skin, int startValue, int minDegreeVal, int maxDegreeVal, int stepSizePara) {
 
         this.currentDegreeValue = startValue;
         this.minDegreeVal = minDegreeVal;
         this.maxDegreeVal = maxDegreeVal;
+        this.stepSize = stepSizePara;
 
         // making the custom TextButtonStyle
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -59,9 +71,10 @@ public class MySpinner extends Table {
         decrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (validateValue(currentDegreeValue - 1)) {
+                if (validateValue(currentDegreeValue - stepSize)) {
                     isValidValue = true;
-                    spinnerTF.setText(String.valueOf(--currentDegreeValue));
+                    currentDegreeValue -= stepSize;
+                    spinnerTF.setText(String.valueOf(currentDegreeValue));
                 } else
                     isValidValue = false;
             }
@@ -75,9 +88,10 @@ public class MySpinner extends Table {
         incrementTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (validateValue(currentDegreeValue + 1)){
+                if (validateValue(currentDegreeValue + stepSize)){
                     isValidValue = true;
-                    spinnerTF.setText(String.valueOf(++currentDegreeValue));
+                    currentDegreeValue += stepSize;
+                    spinnerTF.setText(String.valueOf(currentDegreeValue));
                 } else
                     isValidValue = false;
             }

@@ -323,7 +323,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private void configureDegreeField() {
         Label degreeLabel = new Label("Degree", labelStyle);
 
-        spinner = new MySpinner(skin, 90, 0, 100);
+        spinner = new MySpinner(skin, 90, 0, 100, 5);
         spinner.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
