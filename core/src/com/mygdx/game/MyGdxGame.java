@@ -131,7 +131,7 @@ public class MyGdxGame extends ApplicationAdapter {
         textFieldStyle.background = localSkin.getDrawable("textfield");
         textFieldStyle.font = localSkin.getFont("default-font");
         textFieldStyle.fontColor = localSkin.getColor("white");
-        textFieldStyle.font.getData().setScale(2.f);
+        textFieldStyle.font.getData().setScale(2.0f);
 
         textFieldStyle.background.setLeftWidth(SMALL_SPACING);
         textFieldStyle.background.setTopHeight(SMALL_SPACING);

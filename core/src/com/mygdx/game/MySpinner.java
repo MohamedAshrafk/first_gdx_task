@@ -3,20 +3,18 @@ package com.mygdx.game;
 import static com.mygdx.game.MyGdxGame.SMALL_SPACING;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 
 public class MySpinner extends Table {
 
     private static final int SPINNER_DIMENSION = 55;
-    private static final String INCREMENT_TEXT = "+";
-    private static final String DECREMENT_TEXT = "-";
 
     public int getValue() {
         return value;
@@ -54,19 +52,13 @@ public class MySpinner extends Table {
         this.maxDegreeVal = maxDegreeVal;
         this.stepSize = stepSizePara;
 
-        // making the custom TextButtonStyle
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.getDrawable("default-round"); // Set the up (default) drawable
-        textButtonStyle.down = skin.getDrawable("default-round-down"); // Set the down drawable
-        textButtonStyle.up.setRightWidth(SMALL_SPACING);
-        textButtonStyle.down.setRightWidth(SMALL_SPACING);
-
-        textButtonStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        textButtonStyle.font.getData().setScale(3f);
-
         // making the spinner using two TextButtons and a TextField
-        TextButton decrementTB = new TextButton(DECREMENT_TEXT, textButtonStyle);
-        decrementTB.addListener(new ChangeListener() {
+        Drawable minusIconDrawable = skin.getDrawable("tree-minus");
+        Drawable plusIconDrawable = skin.getDrawable("tree-plus");
+        Drawable selectedIconDrawable = skin.getDrawable("default-round-down");
+
+        Button decrementButton = new Button(new Button.ButtonStyle(minusIconDrawable, selectedIconDrawable, null));
+        decrementButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (validateValue(value - stepSize)) {
@@ -78,12 +70,21 @@ public class MySpinner extends Table {
             }
         });
 
-        spinnerTF = new TextField(String.valueOf(value), skin);
+        // Create a skin (you can use the default skin or create your own)
+        Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.background = localSkin.getDrawable("textfield");
+        textFieldStyle.font = localSkin.getFont("default-font");
+        textFieldStyle.fontColor = localSkin.getColor("white");
+        textFieldStyle.font.getData().setScale(2.1f);
+
+        spinnerTF = new TextField(String.valueOf(value), textFieldStyle);
         spinnerTF.setAlignment(Align.center);
         spinnerTF.setDisabled(true);
 
-        TextButton incrementTB = new TextButton(INCREMENT_TEXT, textButtonStyle);
-        incrementTB.addListener(new ChangeListener() {
+        Button incrementButton = new Button(new Button.ButtonStyle(plusIconDrawable, selectedIconDrawable, null));
+        incrementButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (validateValue(value + stepSize)) {
@@ -95,9 +96,9 @@ public class MySpinner extends Table {
             }
         });
 
-        add(decrementTB).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION).padRight(SMALL_SPACING);
-        add(spinnerTF).prefHeight(SPINNER_DIMENSION + 15f).padRight(SMALL_SPACING);
-        add(incrementTB).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION);
+        add(decrementButton).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION).padRight(SMALL_SPACING);
+        add(spinnerTF).prefHeight(SPINNER_DIMENSION).padRight(SMALL_SPACING);
+        add(incrementButton).prefWidth(SPINNER_DIMENSION).prefHeight(SPINNER_DIMENSION);
     }
 
     private boolean validateValue(int value) {
