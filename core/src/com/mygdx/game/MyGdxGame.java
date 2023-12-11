@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Objects;
 
@@ -44,6 +45,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private static final int BIG_TEXT_FIELD_HEIGHT = 220;
 
     private Stage stage;
+    private Viewport viewport;
     private Skin skin;
     private Table table;
     LabelStyle labelStyle;
@@ -67,7 +69,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
         font = new BitmapFont(Gdx.files.internal("default.fnt"));
 
-        stage = new Stage(new FitViewport(1080, 2340));
+        viewport = new FitViewport(1080, 2340);
+        stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         skin.getFont("default-font").getData().setScale(2.5f);
@@ -95,6 +98,12 @@ public class MyGdxGame extends ApplicationAdapter {
         stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        viewport.update(width, height);
     }
 
     private void configureAll() {
