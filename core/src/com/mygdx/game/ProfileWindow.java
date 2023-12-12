@@ -26,8 +26,15 @@ public class ProfileWindow extends Window {
     public static final int BUTTON_HEIGHT = 70;
     public static final int BUTTON_WIDTH = 140;
 
-    public ProfileWindow(String title, Skin skin, List<ProfileDataItem> profileInfo) {
-        super(title, skin);
+    /**
+     * Creates a special kind of {@link Window} (like dialog) designed to take a list of {@link ProfileDataItem}
+     * and present them in a suitable way with scrollable functionality
+     *
+     * @param profileData The list oof attributes
+     * @param skin        the skin to be used on making the window
+     */
+    public ProfileWindow(List<ProfileDataItem> profileData, Skin skin) {
+        super("", skin);
 
 
         Table localTable = new Table();
@@ -45,7 +52,7 @@ public class ProfileWindow extends Window {
 
         add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
 
-        for (ProfileDataItem profileItem : profileInfo) {
+        for (ProfileDataItem profileItem : profileData) {
             localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
             localTable.add(new Label(profileItem.getAttributeValue(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
             localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
@@ -65,7 +72,8 @@ public class ProfileWindow extends Window {
         add().padTop(GENERAL_HEIGHT_SPACING).row();
         add(cancelButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center);
     }
-
+    /** Centers the window in the stage
+     * */
     public Window show(Stage stage) {
         stage.addActor(this);
         stage.cancelTouchFocus();

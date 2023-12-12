@@ -503,7 +503,7 @@ public class MyGdxGame extends ApplicationAdapter {
         profileDataList.add(new ProfileDataItem("Active", activeCB.isChecked() ? "Yes" : "No"));
 
 
-        final ProfileWindow profileWindow = new ProfileWindow("", skin, profileDataList);
+        final ProfileWindow profileWindow = new ProfileWindow(profileDataList, skin);
         profileWindow.setWidth(DIALOG_WIDTH);
         profileWindow.setHeight(DIALOG_HEIGHT);
 
