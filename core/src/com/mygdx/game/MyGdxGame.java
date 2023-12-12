@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -25,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -500,8 +498,9 @@ public class MyGdxGame extends ApplicationAdapter {
         profileDataList.add(new ProfileDataItem("Degree", String.valueOf(degreeSpinner.getValue())));
         profileDataList.add(new ProfileDataItem("Active", activeCB.isChecked() ? "Yes" : "No"));
 
+        final ProfileData profileData = new ProfileData(profileDataList);
 
-        final ProfileWindow profileWindow = new ProfileWindow("", skin, profileDataList);
+        final ProfileWindow profileWindow = new ProfileWindow("", skin, profileData);
         profileWindow.setWidth(DIALOG_WIDTH);
         profileWindow.setHeight(DIALOG_HEIGHT);
 

@@ -20,13 +20,13 @@ public class ProfileWindow extends Window {
     public static final int DIALOG_HORIZONTAL_SPACING = 100;
     public static final int GENERAL_HEIGHT_SPACING = 30;
     public static final int TABLE_HORIZONTAL_PADDING = 30;
-    public static final int TEXT_FIELD_WIDTH = 400;
+    public static final int TEXT_FIELD_WIDTH = 700;
     public static final int DIALOG_WIDTH = 900;
     public static final int DIALOG_HEIGHT = 1100;
     public static final int BUTTON_HEIGHT = 70;
     public static final int BUTTON_WIDTH = 140;
 
-    public ProfileWindow(String title, Skin skin, List<ProfileDataItem> profileInfo) {
+    public ProfileWindow(String title, Skin skin, ProfileData profileData) {
         super(title, skin);
 
 
@@ -45,17 +45,13 @@ public class ProfileWindow extends Window {
 
         add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
 
-        for (ProfileDataItem profileItem : profileInfo) {
-            localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
-            localTable.add(new Label(profileItem.getAttributeValue(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
-            localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-        }
+        localTable.add(new Label(profileData.toString(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        for (ProfileDataItem profileItem : profileInfo) {
-            localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
-            localTable.add(new Label(profileItem.getAttributeValue(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
-            localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-        }
+
+        localTable.add(new Label(profileData.toString(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
 
         TextButton cancelButton = new TextButton("OK", skin);
         cancelButton.addListener(new ChangeListener() {
