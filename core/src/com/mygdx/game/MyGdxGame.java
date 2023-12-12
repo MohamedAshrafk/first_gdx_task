@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -37,18 +38,18 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Objects;
 
 public class MyGdxGame extends ApplicationAdapter {
-    private static final int GENERAL_HEIGHT_SPACING = 50;
-    private static final int GENERAL_WIDTH_SPACING = 250;
+    public static final int GENERAL_HEIGHT_SPACING = 50;
+    public static final int GENERAL_WIDTH_SPACING = 250;
     public static final int SMALL_SPACING = 15;
-    private static final int TEXT_FIELD_WIDTH = 500;
-    private static final int TABLE_HORIZONTAL_PADDING = 30;
-    private static final int TABLE_VERTICAL_PADDING = 50;
-    private static final int BIG_TEXT_FIELD_HEIGHT = 220;
-    private static final int SCREEN_WIDTH = 1080;
-    private static final int SCREEN_HEIGHT = 2340;
-    private static final int DIALOG_WIDTH = 900;
-    private static final int DIALOG_HEIGHT = 1100;
-    private static final int DIALOG_HORIZONTAL_SPACING = 100;
+    public static final int TEXT_FIELD_WIDTH = 500;
+    public static final int TABLE_HORIZONTAL_PADDING = 30;
+    public static final int TABLE_VERTICAL_PADDING = 50;
+    public static final int BIG_TEXT_FIELD_HEIGHT = 220;
+    public static final int SCREEN_WIDTH = 1080;
+    public static final int SCREEN_HEIGHT = 2340;
+    public static final int DIALOG_WIDTH = 900;
+    public static final int DIALOG_HEIGHT = 1100;
+    public static final int DIALOG_HORIZONTAL_SPACING = 100;
 
     private Stage stage;
     private Viewport viewport;
@@ -488,7 +489,9 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void showUserInfo() {
-        final Dialog d = new Dialog("", skin);
+        final Window d = new Window("", skin);
+        d.setWidth(DIALOG_WIDTH);
+        d.setHeight(DIALOG_HEIGHT);
 
         Table localTable = new Table();
         localTable.setFillParent(true);
@@ -538,14 +541,18 @@ public class MyGdxGame extends ApplicationAdapter {
         cancelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                d.hide();
+                d.setVisible(false);
             }
         });
 
         localTable.add(cancelButton).prefWidth(150).prefHeight(70).colspan(3).align(Align.center);
 
-        d.getContentTable().add(localTable).align(Align.topLeft);
-        d.show(stage);
+        d.add(localTable).align(Align.topLeft);
+        stage.addActor(d);
+        stage.cancelTouchFocus();
+        stage.setKeyboardFocus(d);
+        stage.setScrollFocus(d);
+        d.setPosition(Math.round((stage.getWidth() - DIALOG_WIDTH) / 2), Math.round((stage.getHeight() - DIALOG_HEIGHT) / 2));
     }
 
     @Override
