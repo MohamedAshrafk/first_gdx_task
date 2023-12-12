@@ -18,9 +18,13 @@ import java.util.List;
 public class ProfileWindow extends Window {
 
     public static final int DIALOG_HORIZONTAL_SPACING = 100;
-    public static final int GENERAL_HEIGHT_SPACING = 50;
+    public static final int GENERAL_HEIGHT_SPACING = 30;
     public static final int TABLE_HORIZONTAL_PADDING = 30;
-    public static final int TEXT_FIELD_WIDTH = 500;
+    public static final int TEXT_FIELD_WIDTH = 400;
+    public static final int DIALOG_WIDTH = 900;
+    public static final int DIALOG_HEIGHT = 1100;
+    public static final int BUTTON_HEIGHT = 70;
+    public static final int BUTTON_WIDTH = 140;
 
     public ProfileWindow(String title, Skin skin, List<ProfileDataItem> profileInfo) {
         super(title, skin);
@@ -29,7 +33,7 @@ public class ProfileWindow extends Window {
         Table localTable = new Table();
 //        localTable.setFillParent(true);
         localTable.align(Align.topLeft);
-        localTable.padTop(GENERAL_HEIGHT_SPACING / 2f);
+        localTable.padTop(GENERAL_HEIGHT_SPACING);
         localTable.padRight(TABLE_HORIZONTAL_PADDING);
         localTable.padLeft(TABLE_HORIZONTAL_PADDING);
         localTable.padBottom(TABLE_HORIZONTAL_PADDING);
@@ -39,8 +43,13 @@ public class ProfileWindow extends Window {
         titleLabelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
         titleLabelStyle.font.getData().setScale(3f);
 
-        localTable.add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+        add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
+
+        for (ProfileDataItem profileItem : profileInfo) {
+            localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
+            localTable.add(new Label(profileItem.getAttributeValue(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
+            localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+        }
 
         for (ProfileDataItem profileItem : profileInfo) {
             localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
@@ -56,11 +65,11 @@ public class ProfileWindow extends Window {
             }
         });
 
-        localTable.add(cancelButton).prefWidth(150).prefHeight(70).colspan(3).align(Align.center);
-
         ScrollPane scrollPane = new ScrollPane(localTable, skin);
 
-        add(scrollPane).align(Align.topLeft);
+        add(scrollPane).prefHeight(DIALOG_HEIGHT - BUTTON_HEIGHT * 3).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.topLeft).row();
+        add().padTop(GENERAL_HEIGHT_SPACING).row();
+        add(cancelButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center);
     }
 
     public Window show(Stage stage) {
