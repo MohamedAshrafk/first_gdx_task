@@ -51,12 +51,6 @@ public class ProfileWindow extends Window {
             localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
         }
 
-        for (ProfileDataItem profileItem : profileInfo) {
-            localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
-            localTable.add(new Label(profileItem.getAttributeValue(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
-            localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-        }
-
         TextButton cancelButton = new TextButton("OK", skin);
         cancelButton.addListener(new ChangeListener() {
             @Override
