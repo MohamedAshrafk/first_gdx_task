@@ -35,6 +35,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -489,17 +490,18 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void showUserInfo() {
-        final ProfileInfo profileInfo = new ProfileInfo(
-                userNameTF.getText(),
-                emailTF.getText(),
-                genderCBGroup.getChecked().getText().toString(),
-                citiesSelectBox.getSelected(),
-                countryList.getSelected(),
-                String.valueOf(degreeSpinner.getValue()),
-                activeCB.isChecked() ? "Yes" : "No"
-        );
+        final java.util.List<ProfileDataItem> profileDataList = new ArrayList<>();
 
-        final ProfileWindow profileWindow = new ProfileWindow("", skin, profileInfo);
+        profileDataList.add(new ProfileDataItem("User name", userNameTF.getText()));
+        profileDataList.add(new ProfileDataItem("Email", emailTF.getText()));
+        profileDataList.add(new ProfileDataItem("Gender", genderCBGroup.getChecked().getText().toString()));
+        profileDataList.add(new ProfileDataItem("City", citiesSelectBox.getSelected()));
+        profileDataList.add(new ProfileDataItem("Country", countryList.getSelected()));
+        profileDataList.add(new ProfileDataItem("Degree", String.valueOf(degreeSpinner.getValue())));
+        profileDataList.add(new ProfileDataItem("Active", activeCB.isChecked() ? "Yes" : "No"));
+
+
+        final ProfileWindow profileWindow = new ProfileWindow("", skin, profileDataList);
         profileWindow.setWidth(DIALOG_WIDTH);
         profileWindow.setHeight(DIALOG_HEIGHT);
 

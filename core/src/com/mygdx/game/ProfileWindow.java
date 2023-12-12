@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+
+import java.util.List;
 
 public class ProfileWindow extends Window {
 
@@ -19,12 +22,13 @@ public class ProfileWindow extends Window {
     public static final int TABLE_HORIZONTAL_PADDING = 30;
     public static final int TEXT_FIELD_WIDTH = 500;
 
-    public ProfileWindow(String title, Skin skin, ProfileInfo profileInfo) {
+    public ProfileWindow(String title, Skin skin, List<ProfileDataItem> profileInfo) {
         super(title, skin);
 
+
         Table localTable = new Table();
-        localTable.setFillParent(true);
-        localTable.align(Align.left);
+//        localTable.setFillParent(true);
+        localTable.align(Align.topLeft);
         localTable.padTop(GENERAL_HEIGHT_SPACING / 2f);
         localTable.padRight(TABLE_HORIZONTAL_PADDING);
         localTable.padLeft(TABLE_HORIZONTAL_PADDING);
@@ -38,41 +42,11 @@ public class ProfileWindow extends Window {
         localTable.add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
         localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
-        localTable.add(new Label("User Name:", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
-        localTable.add(new Label(profileInfo.getUserName(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Email:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getEmail(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Gender:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getGender(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("City:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getCities(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Country:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getCountry(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Degree:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getDegree(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Active:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getActive(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Active:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getActive(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Active:", skin)).align(Align.left);
-        localTable.add(new Label(profileInfo.getActive(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+        for (ProfileDataItem profileItem : profileInfo) {
+            localTable.add(new Label(profileItem.getAttributeName() + ":", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
+            localTable.add(new Label(profileItem.getAttributeValue(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
+            localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+        }
 
         TextButton cancelButton = new TextButton("OK", skin);
         cancelButton.addListener(new ChangeListener() {
@@ -84,10 +58,12 @@ public class ProfileWindow extends Window {
 
         localTable.add(cancelButton).prefWidth(150).prefHeight(70).colspan(3).align(Align.center);
 
-        add(localTable).align(Align.topLeft);
+        ScrollPane scrollPane = new ScrollPane(localTable, skin);
+
+        add(scrollPane).align(Align.topLeft);
     }
 
-    public Window show(Stage stage){
+    public Window show(Stage stage) {
         stage.addActor(this);
         stage.cancelTouchFocus();
         stage.setKeyboardFocus(this);
