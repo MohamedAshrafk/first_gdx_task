@@ -489,70 +489,21 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     private void showUserInfo() {
-        final Window d = new Window("", skin);
-        d.setWidth(DIALOG_WIDTH);
-        d.setHeight(DIALOG_HEIGHT);
+        final ProfileInfo profileInfo = new ProfileInfo(
+                userNameTF.getText(),
+                emailTF.getText(),
+                genderCBGroup.getChecked().getText().toString(),
+                citiesSelectBox.getSelected(),
+                countryList.getSelected(),
+                String.valueOf(degreeSpinner.getValue()),
+                activeCB.isChecked() ? "Yes" : "No"
+        );
 
-        Table localTable = new Table();
-        localTable.setFillParent(true);
-        localTable.align(Align.left);
-        localTable.padTop(GENERAL_HEIGHT_SPACING / 2f);
-        localTable.padRight(TABLE_HORIZONTAL_PADDING);
-        localTable.padLeft(TABLE_HORIZONTAL_PADDING);
-        localTable.padBottom(TABLE_HORIZONTAL_PADDING);
+        final ProfileWindow profileWindow = new ProfileWindow("", skin, profileInfo);
+        profileWindow.setWidth(DIALOG_WIDTH);
+        profileWindow.setHeight(DIALOG_HEIGHT);
 
-        // Labels styles and settings
-        LabelStyle titleLabelStyle = new LabelStyle();
-        titleLabelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
-        titleLabelStyle.font.getData().setScale(3f);
-
-        localTable.add(new Label("Your Info", titleLabelStyle)).colspan(2).align(Align.center).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("User Name:", skin)).padRight(DIALOG_HORIZONTAL_SPACING).align(Align.left);
-        localTable.add(new Label(userNameTF.getText(), skin)).prefWidth(TEXT_FIELD_WIDTH).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Email:", skin)).align(Align.left);
-        localTable.add(new Label(emailTF.getText(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Gender:", skin)).align(Align.left);
-        localTable.add(new Label(genderCBGroup.getChecked().getText(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("City:", skin)).align(Align.left);
-        localTable.add(new Label(citiesSelectBox.getSelected(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Country:", skin)).align(Align.left);
-        localTable.add(new Label(countryList.getSelected(), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Degree:", skin)).align(Align.left);
-        localTable.add(new Label(String.valueOf(degreeSpinner.getValue()), skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Active:", skin)).align(Align.left);
-        localTable.add(new Label(activeCB.isChecked() ? "Yes" : "No", skin)).align(Align.left).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        TextButton cancelButton = new TextButton("OK", skin);
-        cancelButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                d.setVisible(false);
-            }
-        });
-
-        localTable.add(cancelButton).prefWidth(150).prefHeight(70).colspan(3).align(Align.center);
-
-        d.add(localTable).align(Align.topLeft);
-        stage.addActor(d);
-        stage.cancelTouchFocus();
-        stage.setKeyboardFocus(d);
-        stage.setScrollFocus(d);
-        d.setPosition(Math.round((stage.getWidth() - DIALOG_WIDTH) / 2), Math.round((stage.getHeight() - DIALOG_HEIGHT) / 2));
+        profileWindow.show(stage);
     }
 
     @Override
