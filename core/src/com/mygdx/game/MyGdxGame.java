@@ -52,6 +52,9 @@ public class MyGdxGame extends ApplicationAdapter {
     public static final int DIALOG_HEIGHT = 1100;
     public static final int DIALOG_HORIZONTAL_SPACING = 100;
 
+    public static final int BUTTON_HEIGHT = 70;
+    public static final int BUTTON_WIDTH = 140;
+
     private Stage stage;
     private Viewport viewport;
     private Skin skin;
@@ -400,8 +403,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     progressBar.setVisible(true);
                     doProgress();
                 } else {
-                    String commentString = "missing fields" + "\n";
-                    commentTF.appendText(commentString);
+                    showMissingFieldsDialog();
                 }
             }
         });
@@ -506,6 +508,41 @@ public class MyGdxGame extends ApplicationAdapter {
         profileWindow.setHeight(DIALOG_HEIGHT);
 
         profileWindow.show(stage);
+    }
+
+    private void showMissingFieldsDialog() {
+        // Labels styles and settings
+        Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
+        titleLabelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
+        titleLabelStyle.font.getData().setScale(3f);
+
+        final Dialog dialog = new Dialog("", skin);
+
+        Table localTable = new Table();
+//        localTable.setFillParent(true);
+        localTable.align(Align.center);
+        localTable.padTop(GENERAL_HEIGHT_SPACING / 2f);
+        localTable.padRight(TABLE_HORIZONTAL_PADDING);
+        localTable.padLeft(TABLE_HORIZONTAL_PADDING);
+        localTable.padBottom(TABLE_HORIZONTAL_PADDING);
+
+        localTable.add(new Label("Error: Missing Fields", titleLabelStyle)).align(Align.center).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        localTable.add(new Label("Please fill all fields", skin)).align(Align.center).row();
+        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
+
+        TextButton cancelButton = new TextButton("OK", skin);
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                dialog.hide();
+            }
+        });
+
+        localTable.add(cancelButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center).row();
+        dialog.getContentTable().add(localTable).prefWidth(DIALOG_WIDTH - 200f).align(Align.center);
+        dialog.show(stage);
     }
 
     @Override
