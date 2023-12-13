@@ -26,6 +26,16 @@ public class DrawingUtilities {
         return new TextureRegionDrawable(pixmaptex);
     }
 
+    static public Drawable createLineBorder(Color color, int width, int height, int offsetX, int offsetY, int lineWidth, int lineHeight) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(color);
+        pixmap.fillRectangle(offsetX, offsetY, lineWidth, lineHeight);
+
+        Texture pixmaptex = new Texture(pixmap);
+        pixmap.dispose();
+        return new TextureRegionDrawable(pixmaptex);
+    }
+
     // Helper method to create a circular drawable
     static public Drawable createCircularDrawable(Color color, int radius) {
         Pixmap pixmap = new Pixmap(2 * radius, 2 * radius, Pixmap.Format.RGBA8888);

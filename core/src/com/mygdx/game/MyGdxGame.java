@@ -51,7 +51,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1080;
     public static final int SCREEN_HEIGHT = 2340;
     public static final int DIALOG_WIDTH = 900;
-    public static final int DIALOG_HEIGHT = 950;
+    public static final int DIALOG_HEIGHT = 1050;
     public static final int DIALOG_HORIZONTAL_SPACING = 100;
 
     public static final int BUTTON_HEIGHT = 70;

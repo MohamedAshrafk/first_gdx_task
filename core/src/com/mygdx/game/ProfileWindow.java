@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.DrawingUtilities.createLineBorder;
 import static com.mygdx.game.MyGdxGame.DIALOG_HEIGHT;
 import static com.mygdx.game.MyGdxGame.DIALOG_WIDTH;
 import static com.mygdx.game.DrawingUtilities.createCircularDrawable;
@@ -31,6 +32,8 @@ public class ProfileWindow extends Window {
     public static final int BUTTON_WIDTH = 140;
     private static final int CANCEL_BUTTON_RADIUS = 30;
     private static final int WINDOW_ROUNDING_RADIUS = 30;
+    private static final int HEADER_LINE_OFFSET = 35;
+    private static final int LINE_HEIGHT = 4;
 
     /**
      * Creates a special kind of {@link Window} (like dialog) designed to take a list of {@link ProfileDataItem}
@@ -62,9 +65,12 @@ public class ProfileWindow extends Window {
         titleLabelStyle.font.getData().setScale(3f);
 
         Table headerTable = new Table();
-        headerTable.padLeft(10);
-        headerTable.padTop(2.5f);
-        headerTable.padBottom(2.5f);
+        headerTable.padLeft(20);
+        headerTable.padRight(30);
+        headerTable.padTop(40);
+        headerTable.padBottom(20);
+
+        headerTable.background(createLineBorder(Color.GRAY, DIALOG_WIDTH, 95, HEADER_LINE_OFFSET, 90, DIALOG_WIDTH - HEADER_LINE_OFFSET * 2, LINE_HEIGHT));
 
         // Create a skin
         Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -74,7 +80,7 @@ public class ProfileWindow extends Window {
         buttonStyle.down = createCircularDrawable(Color.RED, CANCEL_BUTTON_RADIUS);
         buttonStyle.font = localSkin.getFont("default-font");
         buttonStyle.fontColor = Color.WHITE;
-        buttonStyle.font.getData().setScale(2.2f);
+        buttonStyle.font.getData().setScale(3f);
 
 
         TextButton cancelButton = new TextButton(" X ", buttonStyle);
@@ -88,10 +94,9 @@ public class ProfileWindow extends Window {
         cancelButton.setWidth(CANCEL_BUTTON_RADIUS * 2);
         cancelButton.setWidth(CANCEL_BUTTON_RADIUS * 2);
 
-        headerTable.add(cancelButton).prefWidth(CANCEL_BUTTON_RADIUS * 2).prefHeight(CANCEL_BUTTON_RADIUS * 2).align(Align.left).padRight(260).align(Align.left);
-        headerTable.add(new Label("Your Info", titleLabelStyle)).padRight(360).align(Align.center);
+        headerTable.add(cancelButton).prefWidth(CANCEL_BUTTON_RADIUS * 2).prefHeight(CANCEL_BUTTON_RADIUS * 2).padRight(530).align(Align.left);
+        headerTable.add(new Label("Your Info", titleLabelStyle)).align(Align.right);
 
-        headerTable.background(createRoundedDrawable(Color.GRAY, DIALOG_WIDTH, 70, WINDOW_ROUNDING_RADIUS));
 
         add(headerTable).align(Align.left).row();
         add().padTop(GENERAL_HEIGHT_SPACING).row();
@@ -112,7 +117,7 @@ public class ProfileWindow extends Window {
 
         ScrollPane scrollPane = new ScrollPane(localTable, skin);
 
-        add(scrollPane).prefHeight(DIALOG_HEIGHT - BUTTON_HEIGHT * 3.5f).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
+        add(scrollPane).prefHeight(DIALOG_HEIGHT - BUTTON_HEIGHT * 4.5f).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
         add().padTop(GENERAL_HEIGHT_SPACING).row();
         add(okButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center);
     }
