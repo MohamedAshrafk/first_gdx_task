@@ -117,7 +117,15 @@ public class ProfileWindow extends Window {
             }
         });
 
-        ScrollPane scrollPane = new ScrollPane(localTable, skin);
+        ScrollPane.ScrollPaneStyle scrollPaneStyle = new ScrollPane.ScrollPaneStyle();
+        scrollPaneStyle.vScroll = skin.getDrawable("default-scroll");
+        scrollPaneStyle.hScrollKnob = skin.getDrawable("default-round-large");
+        scrollPaneStyle.background = null;
+        scrollPaneStyle.hScroll = skin.getDrawable("default-scroll");
+        scrollPaneStyle.vScrollKnob = skin.getDrawable("default-round-large");
+
+        ScrollPane scrollPane = new ScrollPane(localTable, scrollPaneStyle);
+        scrollPane.setFadeScrollBars(false);
 
         add(scrollPane).prefHeight(DIALOG_HEIGHT - SCROLL_PANE_CUT_HEIGHT).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
         add().padTop(GENERAL_HEIGHT_SPACING).row();
