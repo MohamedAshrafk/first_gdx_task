@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+/** Model for setting and getting every Profile attribute of the user
+ * (Can be replaced by a {@link java.util.Map})
+ * */
 public class ProfileDataItem {
     public String getAttributeName() {
         return attributeName;

@@ -1,16 +1,15 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.MyGdxGame.DIALOG_HEIGHT;
+import static com.mygdx.game.MyGdxGame.DIALOG_WIDTH;
+import static com.mygdx.game.DrawingUtilities.createCircularDrawable;
+import static com.mygdx.game.DrawingUtilities.createRoundedDrawable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
@@ -29,53 +27,10 @@ public class ProfileWindow extends Window {
     public static final int GENERAL_HEIGHT_SPACING = 30;
     public static final int TABLE_HORIZONTAL_PADDING = 30;
     public static final int TEXT_FIELD_WIDTH = 400;
-    public static final int DIALOG_WIDTH = 900;
-    public static final int DIALOG_HEIGHT = 1200;
     public static final int BUTTON_HEIGHT = 70;
     public static final int BUTTON_WIDTH = 140;
-
-//    @Override
-//    public void draw(Batch batch, float parentAlpha) {
-//        ShapeRenderer shapeRenderer = new ShapeRenderer();
-//        // Draw a background with a header using ShapeRenderer
-//        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//
-//        // Draw background
-//        shapeRenderer.setColor(Color.GRAY);
-//        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-//
-//        // Draw header
-//        shapeRenderer.setColor(Color.DARK_GRAY);
-//        shapeRenderer.rect(getX(), getY() + getHeight() - getTitleLabel().getHeight(), getWidth(), getTitleLabel().getHeight());
-//
-//        shapeRenderer.end();
-//
-//        super.draw(batch, parentAlpha);
-//    }
-
-
-//    @Override
-//    protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
-//        super.drawBackground(batch, parentAlpha, x, y);
-//
-//        ShapeRenderer shapeRenderer = new ShapeRenderer();
-//        // Draw a background with a header using ShapeRenderer
-//        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//
-//        // Draw background
-//        shapeRenderer.setColor(Color.GRAY);
-//        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-//
-//        // Draw header
-//        shapeRenderer.setColor(Color.DARK_GRAY);
-//        shapeRenderer.rect(getX(), getY() + getHeight() - getTitleLabel().getHeight(), getWidth(), getTitleLabel().getHeight());
-//
-//        shapeRenderer.end();
-//
-//        super.draw(batch, parentAlpha);
-//    }
+    private static final int CANCEL_BUTTON_RADIUS = 30;
+    private static final int WINDOW_ROUNDING_RADIUS = 30;
 
     /**
      * Creates a special kind of {@link Window} (like dialog) designed to take a list of {@link ProfileDataItem}
@@ -87,16 +42,16 @@ public class ProfileWindow extends Window {
     public ProfileWindow(List<ProfileDataItem> profileData, Skin skin) {
         super("", skin);
 
-//        background(new TextureRegionDrawable(getTexture(Color.GREEN)));
-
+        padTop(0);
         padRight(0);
         padLeft(0);
-
+        align(Align.top);
+        background(createRoundedDrawable(Color.DARK_GRAY, DIALOG_WIDTH, DIALOG_HEIGHT, WINDOW_ROUNDING_RADIUS));
 
         Table localTable = new Table();
 //        localTable.setFillParent(true);
         localTable.align(Align.topLeft);
-//        localTable.padTop(GENERAL_HEIGHT_SPACING);
+        localTable.padTop(GENERAL_HEIGHT_SPACING);
         localTable.padRight(TABLE_HORIZONTAL_PADDING);
         localTable.padLeft(TABLE_HORIZONTAL_PADDING);
         localTable.padBottom(TABLE_HORIZONTAL_PADDING);
@@ -107,20 +62,36 @@ public class ProfileWindow extends Window {
         titleLabelStyle.font.getData().setScale(3f);
 
         Table headerTable = new Table();
+        headerTable.padLeft(10);
+        headerTable.padTop(2.5f);
+        headerTable.padBottom(2.5f);
 
-        TextButton cancelButton = new TextButton("X", skin);
+        // Create a skin
+        Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
+        // Create a circular background for the button
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+        buttonStyle.up = createCircularDrawable(Color.DARK_GRAY, CANCEL_BUTTON_RADIUS);
+        buttonStyle.down = createCircularDrawable(Color.RED, CANCEL_BUTTON_RADIUS);
+        buttonStyle.font = localSkin.getFont("default-font");
+        buttonStyle.fontColor = Color.WHITE;
+        buttonStyle.font.getData().setScale(2.2f);
+
+
+        TextButton cancelButton = new TextButton(" X ", buttonStyle);
         cancelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 setVisible(false);
             }
         });
+        cancelButton.padTop(5).padRight(5);
+        cancelButton.setWidth(CANCEL_BUTTON_RADIUS * 2);
+        cancelButton.setWidth(CANCEL_BUTTON_RADIUS * 2);
 
-        headerTable.add().padRight(300).align(Align.left);
-        headerTable.add(new Label("Your Info", titleLabelStyle)).padRight(240).align(Align.center);
-        headerTable.add(cancelButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.right);
+        headerTable.add(cancelButton).prefWidth(CANCEL_BUTTON_RADIUS * 2).prefHeight(CANCEL_BUTTON_RADIUS * 2).align(Align.left).padRight(260).align(Align.left);
+        headerTable.add(new Label("Your Info", titleLabelStyle)).padRight(360).align(Align.center);
 
-        headerTable.background(new TextureRegionDrawable(getTexture(Color.GRAY)));
+        headerTable.background(createRoundedDrawable(Color.GRAY, DIALOG_WIDTH, 70, WINDOW_ROUNDING_RADIUS));
 
         add(headerTable).align(Align.left).row();
         add().padTop(GENERAL_HEIGHT_SPACING).row();
@@ -131,12 +102,19 @@ public class ProfileWindow extends Window {
             localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
         }
 
-
+        TextButton okButton = new TextButton("OK", skin);
+        okButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                setVisible(false);
+            }
+        });
 
         ScrollPane scrollPane = new ScrollPane(localTable, skin);
 
-        add(scrollPane).prefHeight(DIALOG_HEIGHT - BUTTON_HEIGHT * 3).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
+        add(scrollPane).prefHeight(DIALOG_HEIGHT - BUTTON_HEIGHT * 3.5f).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
         add().padTop(GENERAL_HEIGHT_SPACING).row();
+        add(okButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center);
     }
 
     /**
@@ -149,21 +127,5 @@ public class ProfileWindow extends Window {
         stage.setScrollFocus(this);
         setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
         return this;
-    }
-
-    static public TextureRegion getTexture(Color color) {
-        // Create a Pixmap with the White color
-        Pixmap pixmapW = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmapW.setColor(color);
-        pixmapW.fill();
-
-        // You can draw more on the pixmap if needed
-        pixmapW.setColor(0, 1, 0, 1); // Set color to green
-        pixmapW.drawRectangle(10, 10, 50, 50); // Draw a green rectangle
-
-
-        // Create a TextureRegion from the Pixmap
-        Texture texture = new Texture(pixmapW);
-        return new TextureRegion(texture);
     }
 }

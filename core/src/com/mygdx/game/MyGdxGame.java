@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import static com.mygdx.game.DrawingUtilities.createRoundedDrawable;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -49,7 +51,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 1080;
     public static final int SCREEN_HEIGHT = 2340;
     public static final int DIALOG_WIDTH = 900;
-    public static final int DIALOG_HEIGHT = 1100;
+    public static final int DIALOG_HEIGHT = 950;
     public static final int DIALOG_HORIZONTAL_SPACING = 100;
 
     public static final int BUTTON_HEIGHT = 70;
@@ -517,7 +519,13 @@ public class MyGdxGame extends ApplicationAdapter {
         titleLabelStyle.font = new BitmapFont(Gdx.files.internal("default.fnt"));
         titleLabelStyle.font.getData().setScale(3f);
 
-        final Dialog dialog = new Dialog("", skin);
+        // Create a rounded background for the dialog
+        Window.WindowStyle dialogStyle = new Window.WindowStyle();
+        dialogStyle.background = createRoundedDrawable(Color.DARK_GRAY, 500, 300, 25);
+        dialogStyle.titleFont = skin.getFont("default-font");
+        dialogStyle.titleFontColor = Color.WHITE;
+
+        final Dialog dialog = new Dialog("", dialogStyle);
 
         Table localTable = new Table();
 //        localTable.setFillParent(true);
@@ -527,10 +535,7 @@ public class MyGdxGame extends ApplicationAdapter {
         localTable.padLeft(TABLE_HORIZONTAL_PADDING);
         localTable.padBottom(TABLE_HORIZONTAL_PADDING);
 
-        localTable.add(new Label("Error: Missing Fields", titleLabelStyle)).align(Align.center).row();
-        localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
-
-        localTable.add(new Label("Please fill all fields", skin)).align(Align.center).row();
+        localTable.add(new Label("Please fill all fields", titleLabelStyle)).align(Align.center).row();
         localTable.add().padTop(GENERAL_HEIGHT_SPACING).row();
 
         TextButton cancelButton = new TextButton("OK", skin);
