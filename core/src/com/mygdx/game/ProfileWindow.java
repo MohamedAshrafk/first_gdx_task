@@ -33,7 +33,9 @@ public class ProfileWindow extends Window {
     private static final int CANCEL_BUTTON_RADIUS = 30;
     private static final int WINDOW_ROUNDING_RADIUS = 30;
     private static final int HEADER_LINE_OFFSET = 35;
+    private static final int HEADER_HEIGHT = 95;
     private static final int LINE_HEIGHT = 2;
+    private static final int SCROLL_PANE_CUT_HEIGHT = (int) (BUTTON_HEIGHT * 4.4);
 
     /**
      * Creates a special kind of {@link Window} (like dialog) designed to take a list of {@link ProfileDataItem}
@@ -70,7 +72,7 @@ public class ProfileWindow extends Window {
         headerTable.padTop(40);
         headerTable.padBottom(20);
 
-        headerTable.background(createLineBorder(Color.LIGHT_GRAY, DIALOG_WIDTH, 95, HEADER_LINE_OFFSET, 90, DIALOG_WIDTH - HEADER_LINE_OFFSET * 2, LINE_HEIGHT));
+        headerTable.background(createLineBorder(Color.LIGHT_GRAY, DIALOG_WIDTH, HEADER_HEIGHT, HEADER_LINE_OFFSET, HEADER_HEIGHT - 5, DIALOG_WIDTH - HEADER_LINE_OFFSET * 2, LINE_HEIGHT));
 
         // Create a skin
         Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -117,7 +119,7 @@ public class ProfileWindow extends Window {
 
         ScrollPane scrollPane = new ScrollPane(localTable, skin);
 
-        add(scrollPane).prefHeight(DIALOG_HEIGHT - BUTTON_HEIGHT * 4.5f).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
+        add(scrollPane).prefHeight(DIALOG_HEIGHT - SCROLL_PANE_CUT_HEIGHT).prefWidth(DIALOG_WIDTH - TABLE_HORIZONTAL_PADDING * 2).align(Align.center).row();
         add().padTop(GENERAL_HEIGHT_SPACING).row();
         add(okButton).prefWidth(BUTTON_WIDTH).prefHeight(BUTTON_HEIGHT).align(Align.center);
     }

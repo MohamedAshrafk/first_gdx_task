@@ -401,13 +401,13 @@ public class MyGdxGame extends ApplicationAdapter {
         signUpTB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-//                if (!userNameTF.getText().isEmpty() && !emailTF.getText().isEmpty() && !passwordTF.getText().isEmpty()) {
-//                    progressBar.setVisible(true);
-//                    doProgress();
-//                } else {
-//                    showMissingFieldsDialog();
-//                }
-                showUserInfo();
+                if (!userNameTF.getText().isEmpty() && !emailTF.getText().isEmpty() && !passwordTF.getText().isEmpty()) {
+                    progressBar.setVisible(true);
+                    doProgress();
+                } else {
+                    showMissingFieldsDialog();
+                }
+//                showUserInfo();
             }
         });
         clearTB.addListener(new ChangeListener() {
