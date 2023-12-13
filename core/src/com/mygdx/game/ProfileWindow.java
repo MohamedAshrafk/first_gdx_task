@@ -33,7 +33,7 @@ public class ProfileWindow extends Window {
     private static final int CANCEL_BUTTON_RADIUS = 30;
     private static final int WINDOW_ROUNDING_RADIUS = 30;
     private static final int HEADER_LINE_OFFSET = 35;
-    private static final int LINE_HEIGHT = 4;
+    private static final int LINE_HEIGHT = 2;
 
     /**
      * Creates a special kind of {@link Window} (like dialog) designed to take a list of {@link ProfileDataItem}
@@ -70,7 +70,7 @@ public class ProfileWindow extends Window {
         headerTable.padTop(40);
         headerTable.padBottom(20);
 
-        headerTable.background(createLineBorder(Color.GRAY, DIALOG_WIDTH, 95, HEADER_LINE_OFFSET, 90, DIALOG_WIDTH - HEADER_LINE_OFFSET * 2, LINE_HEIGHT));
+        headerTable.background(createLineBorder(Color.LIGHT_GRAY, DIALOG_WIDTH, 95, HEADER_LINE_OFFSET, 90, DIALOG_WIDTH - HEADER_LINE_OFFSET * 2, LINE_HEIGHT));
 
         // Create a skin
         Skin localSkin = new Skin(Gdx.files.internal("uiskin.json"));
