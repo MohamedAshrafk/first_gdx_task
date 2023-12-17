@@ -21,8 +21,8 @@ public class MySpinner extends Table {
     }
 
     private int value;
-    private final int minDegreeVal;
-    private final int maxDegreeVal;
+    private final int minVal;
+    private final int maxVal;
     private final int stepSize;
 
     TextField spinnerTF;
@@ -41,15 +41,15 @@ public class MySpinner extends Table {
      *
      * @param skin         the skin to be used on making the spinner
      * @param startValue   the start value
-     * @param minDegreeVal the minimum value
-     * @param maxDegreeVal the maximum value
+     * @param minVal the minimum value
+     * @param maxVal the maximum value
      * @param stepSizePara the step size between values
      */
-    public MySpinner(Skin skin, int startValue, int minDegreeVal, int maxDegreeVal, int stepSizePara) {
+    public MySpinner(Skin skin, int startValue, int minVal, int maxVal, int stepSizePara) {
 
         this.value = startValue;
-        this.minDegreeVal = minDegreeVal;
-        this.maxDegreeVal = maxDegreeVal;
+        this.minVal = minVal;
+        this.maxVal = maxVal;
         this.stepSize = stepSizePara;
 
         // making the spinner using two TextButtons and a TextField
@@ -102,6 +102,6 @@ public class MySpinner extends Table {
     }
 
     private boolean validateValue(int value) {
-        return value <= maxDegreeVal && value >= minDegreeVal;
+        return value <= maxVal && value >= minVal;
     }
 }
